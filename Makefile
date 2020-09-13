@@ -2,8 +2,8 @@ CXX = g++
 
 all: structural_alignment
 
-structural_alignment: main.o cif_parser.o file_workflow.o geometry.o biological_structures.o block_distance.o distance_matrix.o distance_score_matrix.o scoring_matrix.o direction_matrix.o traceback.o sequence_aligner.o statistic_calculator.o
-	${CXX} main.o cif_parser.o file_workflow.o geometry.o biological_structures.o block_distance.o distance_matrix.o distance_score_matrix.o scoring_matrix.o direction_matrix.o sequence_aligner.o traceback.o statistic_calculator.o -o structural_alignment
+structural_alignment: main.o cif_parser.o file_workflow.o geometry.o biological_structures.o block_distance.o distance_matrix.o distance_score_matrix.o scoring_matrix.o penalty_decision_matrix.o direction_matrix.o traceback.o sequence_aligner.o statistic_calculator.o
+	${CXX} main.o cif_parser.o file_workflow.o geometry.o biological_structures.o block_distance.o distance_matrix.o distance_score_matrix.o scoring_matrix.o penalty_decision_matrix.o direction_matrix.o sequence_aligner.o traceback.o statistic_calculator.o -o structural_alignment
 
 main.o: main.cpp ./src/biological_structures.h
 	${CXX} main.cpp ./src/biological_structures.cpp -c
@@ -19,6 +19,9 @@ traceback.o: ./src/traceback.cpp ./src/traceback.h
 
 direction_matrix.o: ./src/direction_matrix.cpp ./src/direction_matrix.h
 	${CXX} ./src/direction_matrix.cpp -c
+
+penalty_decision_matrix.o: ./src/penalty_decision_matrix.cpp ./src/penalty_decision_matrix.h
+	${CXX} ./src/penalty_decision_matrix.cpp -c
 
 scoring_matrix.o: ./src/scoring_matrix.cpp ./src/scoring_matrix.h
 	${CXX} ./src/scoring_matrix.cpp -c

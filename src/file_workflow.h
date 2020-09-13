@@ -2,6 +2,7 @@
 #define _FILE_WORKFLOW_
 #include <fstream>
 #include <vector>
+#include <utility>
 #include <stdexcept>
 #include "biological_structures.h"
 
@@ -39,9 +40,12 @@ class CSVFile : public File{
 class TXTFile : public File{
         std::vector<std::string> data_;
     public:
+    TXTFile(std::string file_name);
         TXTFile(std::string file_name, std::vector<std::string> data);
+        std::vector< std::pair<std::string, std::string> > parsePairedData();
         void setData(std::vector<std::string> data);
         void writeData(std::string output_location);
+        void writeData(std::string output_location, std::vector<std::string> data_1, std::vector<std::string> data_2);
 };
 
 #endif

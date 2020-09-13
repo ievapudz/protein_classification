@@ -18,7 +18,7 @@ BlockDistanceCalculator::BlockDistanceCalculator(Protein protein_1, Protein prot
 void BlockDistanceCalculator::setSubstructureLength(int substructure_length){
     // Method that determines the length of blocks, between which the distance calculations will be made.
     
-    if(substructure_length == 0){
+    if(substructure_length <= 0){
         std::invalid_argument ia("Invalid argument for substructure_length in setSubstructureLength.");
         throw ia;
     }
@@ -192,17 +192,29 @@ double BlockDistanceCalculator::getPairDistance(std::pair<double, double> subuni
     
     double pair_distance;
     
+    double phi_distance = abs(subunit_1.first - subunit_2.first);
+    if(phi_distance > 180){
+        phi_distance = abs(360 - phi_distance);
+    }
+    
+    double psi_distance = abs(subunit_1.second - subunit_2.second);
+    if(psi_distance > 180){
+        psi_distance = abs(360 - psi_distance);
+    }
+    
     switch(distance_calculation_choice){
         case 1:
         {
             // Manhattan distance calculation.
-            pair_distance = abs(subunit_1.first - subunit_2.first) + abs(subunit_1.second - subunit_2.second);
+            pair_distance = phi_distance + psi_distance;
             break;
         }
         case 2:
         {
             // Euclidean distance (before taking the square root from the sum) calculation.
-            pair_distance = (subunit_1.first - subunit_2.first)*(subunit_1.first - subunit_2.first) + (subunit_1.second - subunit_2.second)*(subunit_1.second - subunit_2.second);
+            pair_distance = phi_distance * phi_distance + psi_distance * psi_distance;
+            
+            //pair_distance = (subunit_1.first - subunit_2.first)*(subunit_1.first - subunit_2.first) + (subunit_1.second - subunit_2.second)*(subunit_1.second - subunit_2.second);
             break;
         }
     }

@@ -28,6 +28,11 @@ class SequenceAligner{
         std::vector<std::string> getAlignedSequenceP();
         std::vector<std::string> getAlignedSequenceQ();
         std::vector<std::string> getAlignedSequences();
+    
+        std::vector<std::string> getAlignedSequenceP(std::vector<std::string> p_aminoacid_sequence);
+        std::vector<std::string> getAlignedSequenceQ(std::vector<std::string> q_aminoacid_sequence);
+    
+        double getIdentity();
 };
 
 #endif

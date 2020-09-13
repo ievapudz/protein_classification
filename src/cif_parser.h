@@ -16,6 +16,7 @@ class CIFParser{
         std::string getFilePath() const;
         void parseAtomSiteColumns();
         std::vector<Atom> parseAtoms();
+        std::vector<std::string> parseAminoacidSequence();
 };
 
 #endif

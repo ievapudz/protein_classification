@@ -39,19 +39,20 @@ std::vector<std::string> SequenceAligner::getAlignedSequenceP(){
     std::vector<std::string> aligned_p;
     
     for(int k = 0; k < coordinates_.size(); k++){
-        if(directions_[k] == -1){
+        
+        if(directions_[k] == 0){
             if(subunit_chain_Q_[coordinates_[k].second - 1] == subunit_chain_P_[coordinates_[k].first - 1]){
                 aligned_p.push_back(std::to_string(subunit_chain_P_[coordinates_[k].first - 1]));
             }
             else aligned_p.push_back("-");
         }
-        if(directions_[k] == NORTH){
+        else if(directions_[k] == NORTH){
             aligned_p.push_back(std::to_string(subunit_chain_P_[coordinates_[k].first - 1]));
         }
-        if(directions_[k] == NORTH_WEST){
+        else if(directions_[k] == NORTH_WEST){
             aligned_p.push_back(std::to_string(subunit_chain_P_[coordinates_[k].first - 1]));
         }
-        if(directions_[k] == WEST){
+        else if(directions_[k] == WEST){
             aligned_p.push_back("-");
         }
     }
@@ -62,16 +63,17 @@ std::vector<std::string> SequenceAligner::getAlignedSequenceQ(){
     std::vector<std::string> aligned_q;
     
     for(int k = 0; k < coordinates_.size(); k++){
-        if(directions_[k] == -1){
+        
+        if(directions_[k] == 0){
             aligned_q.push_back(std::to_string(subunit_chain_Q_[coordinates_[k].second - 1]));
         }
-        if(directions_[k] == NORTH){
+        else if(directions_[k] == NORTH){
             aligned_q.push_back("-");
         }
-        if(directions_[k] == NORTH_WEST){
+        else if(directions_[k] == NORTH_WEST){
             aligned_q.push_back(std::to_string(subunit_chain_Q_[coordinates_[k].second - 1]));
         }
-        if(directions_[k] == WEST){
+        else if(directions_[k] == WEST){
             aligned_q.push_back(std::to_string(subunit_chain_Q_[coordinates_[k].second - 1]));
         }
     }
@@ -97,5 +99,79 @@ std::vector<std::string> SequenceAligner::getAlignedSequences(){
     }
     
     return aligned_sequences;
+}
+
+std::vector<std::string> SequenceAligner::getAlignedSequenceP(std::vector<std::string> p_aminoacid_sequence){
+    
+    std::vector<std::string> aligned_p;
+    
+    for(int k = 0; k < coordinates_.size(); k++){
+        
+        if(directions_[k] == 0){
+            if(subunit_chain_Q_[coordinates_[k].second - 1] == subunit_chain_P_[coordinates_[k].first - 1]){
+                aligned_p.push_back(p_aminoacid_sequence[ subunit_chain_P_[coordinates_[k].first - 1] - 1 ]);
+            }
+            else{
+                aligned_p.push_back("-");
+            }
+        }
+        else if(directions_[k] == NORTH){
+            aligned_p.push_back(p_aminoacid_sequence[ subunit_chain_P_[coordinates_[k].first - 1] - 1 ]);
+        }
+        else if(directions_[k] == NORTH_WEST){
+            aligned_p.push_back(p_aminoacid_sequence[ subunit_chain_P_[coordinates_[k].first - 1] - 1 ]);
+        }
+        else if(directions_[k] == WEST){
+            aligned_p.push_back("-");
+        }
+    }
+    
+    return aligned_p;
+}
+
+std::vector<std::string> SequenceAligner::getAlignedSequenceQ(std::vector<std::string> q_aminoacid_sequence){
+    std::vector<std::string> aligned_q;
+    
+    for(int k = 0; k < coordinates_.size(); k++){
+                                                                  
+        if(directions_[k] == 0){
+            aligned_q.push_back(q_aminoacid_sequence[ subunit_chain_Q_[coordinates_[k].second - 1] - 1 ]);
+        }
+        else if(directions_[k] == NORTH){
+            aligned_q.push_back("-");
+        }
+        else if(directions_[k] == NORTH_WEST){
+            aligned_q.push_back(q_aminoacid_sequence[ subunit_chain_Q_[coordinates_[k].second - 1] - 1 ]);
+        }
+        else if(directions_[k] == WEST){
+            aligned_q.push_back(q_aminoacid_sequence[ subunit_chain_Q_[coordinates_[k].second - 1] - 1 ]);
+        }
+   }
+                                                              
+   return aligned_q;
+}
+
+double SequenceAligner::getIdentity(){
+    
+    double identity;
+    
+    std::vector<std::string> aligned_P = this->getAlignedSequenceP();
+    std::vector<std::string> aligned_Q = this->getAlignedSequenceQ();
+    
+    int alignment_size = aligned_P.size();
+    if(aligned_Q.size() < alignment_size)
+        alignment_size = aligned_Q.size();
+    
+    double match_count = 0;
+    
+    for(int k = 0; k < alignment_size; k++){
+        if((aligned_P[k] != "-")&&(aligned_Q[k] != "-")){
+            match_count = match_count + 1;
+        }
+    }
+    
+    identity = match_count / alignment_size;
+
+    return identity;
 }
 

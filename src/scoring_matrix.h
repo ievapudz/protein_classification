@@ -6,10 +6,12 @@
 #include <iomanip>
 #include <stdexcept>
 #include "traceback.h"
+#include "distance_matrix.h"
 #include "distance_score_matrix.h"
 #include "direction_matrix.h"
 #include "sequence_aligner.h"
 #include "file_workflow.h"
+#include "penalty_decision_matrix.h"
 #define NORTH 360
 #define NORTH_WEST 315
 #define WEST 270
@@ -43,14 +45,16 @@ class ScoringMatrix{
         double getWestResult(double west_arg, double score);
         double getInitialMaxOper(double north_arg, double north_west_arg, double west_arg);
         double getMaxOperationValue(double max_oper, double north, double north_west, double west);
+    double getMaxOperationValue(double max_oper, double north, double north_west, double west, int& penalty_decision_matrix_element);
         
+    void fillWithScores(char algorithm_choice, std::vector<int> subunit_chain_P, std::vector<int> subunit_chain_Q, const DistanceScoreMatrix& matrix, char initial);
         void fillWithScores(char algorithm_choice, std::vector<int> subunit_chain_P, std::vector<int> subunit_chain_Q, const DistanceScoreMatrix& matrix);
     
         DirectionMatrix getDirectionMatrix(char algorithm_choice);
     
-        void algorithmSmithWaterman(std::vector<int> subunit_chain_P, std::vector<int> subunit_chain_Q, DistanceScoreMatrix& matrix, int substructure_length);
-        void algorithmNeedlemanWunsch(std::vector<int> subunit_chain_P, std::vector<int> subunit_chain_Q, DistanceScoreMatrix& matrix, int substructure_length);
-        
+        void algorithmSmithWaterman(std::vector<int> subunit_chain_P, std::vector<int> subunit_chain_Q, DistanceScoreMatrix& matrix, int substructure_length, std::vector<std::string> p_aminoacid_sequence, std::vector<std::string> q_aminoacid_sequence, int alignment_representation_choice);
+    
+        void algorithmNeedlemanWunsch(std::vector<int> subunit_chain_P, std::vector<int> subunit_chain_Q, DistanceScoreMatrix& matrix, int substructure_length, std::vector<std::string> p_aminoacid_sequence, std::vector<std::string> q_aminoacid_sequence, int alignment_representation_choice);
 };
 
 #endif

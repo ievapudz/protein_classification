@@ -30,8 +30,16 @@ void Atom::setLocation(Vector3D& location){
     location_ = location;
 }
 
+void Atom::setOccupancy(std::string occupancy){
+    occupancy_ = occupancy;
+}
+
 void Atom::setAuthSeqID(std::string auth_seq_id){
     auth_seq_id_ = auth_seq_id;
+}
+
+void Atom::setAuthCompID(std::string auth_comp_id){
+    auth_comp_id_ = auth_comp_id;
 }
 
 void Atom::setAuthAsymID(std::string auth_asym_id){
@@ -62,8 +70,16 @@ Vector3D Atom::getLocation() const{
     return location_;
 }
 
+std::string Atom::getOccupancy() const{
+    return occupancy_;
+}
+
 std::string Atom::getAuthSeqID() const{
     return auth_seq_id_;
+}
+
+std::string Atom::getAuthCompID() const{
+    return auth_comp_id_;
 }
 
 std::string Atom::getAuthAsymID() const{
@@ -92,10 +108,31 @@ bool Atom::validLabelAltID() const{
         return false;
 }
 
+bool Atom::isOccupancyZero() const{
+    int n = occupancy_.length();
+    char char_array[n + 1];
+    std::strcpy(char_array, occupancy_.c_str());
+    double occupancy_double = atof(char_array);
+    if(occupancy_double == 0.0){
+        return true;
+    }
+    else
+        return false;
+}
+
 bool Atom::validAuthAsymID() const{
     if(auth_asym_id_ == "A")
         return true;
     else if(auth_asym_id_ == "AA")
+        return true;
+    else if(auth_asym_id_ == "I")
+        return true;
+    else
+        return false;
+}
+
+bool Atom::equalAuthAsymID(std::string auth_asym_id){
+    if(auth_asym_id_ == auth_asym_id)
         return true;
     else
         return false;
@@ -145,7 +182,7 @@ void Protein::setAtoms(std::vector<Atom>& atoms){
     }
 }
 
-void Protein::filterAtoms(std::string filter_atom_type){
+void Protein::filterAtoms(std::string filter_atom_type, std::string auth_asym_id){
     
     std::string current_seq_id = all_atoms_.begin()->getAuthSeqID();
     
@@ -161,17 +198,19 @@ void Protein::filterAtoms(std::string filter_atom_type){
     std::vector<Atom>::iterator c_position = all_atoms_.end();
     
     while(it->getAuthSeqID() == current_seq_id){
-        if(it->getTypeID() == "N"){
-            triplet_n_present = 1;
-            n_position = it;
-        }
-        if(it->getTypeID() == "CA"){
-            triplet_ca_present = 1;
-            ca_position = it;
-        }
-        if(it->getTypeID() == "C"){
-            triplet_c_present = 1;
-            c_position = it;
+        if(!(it->isOccupancyZero())){
+            if(it->getTypeID() == "N"){
+                triplet_n_present = 1;
+                n_position = it;
+            }
+            if(it->getTypeID() == "CA"){
+                triplet_ca_present = 1;
+                ca_position = it;
+            }
+            if(it->getTypeID() == "C"){
+                triplet_c_present = 1;
+                c_position = it;
+            }
         }
         it++;
     }
@@ -189,7 +228,8 @@ void Protein::filterAtoms(std::string filter_atom_type){
     }
     
     for(int i = 0; i < all_atoms_.size(); i++){
-        if((all_atoms_[i].equalTypeID(filter_atom_type)) && (all_atoms_[i].validLabelAltID()) && (all_atoms_[i].validAuthAsymID()) && (all_atoms_[i].equalPdbxPDBModelNum("1"))){
+        if((all_atoms_[i].equalTypeID(filter_atom_type)) && (all_atoms_[i].validLabelAltID()) && (all_atoms_[i].equalAuthAsymID(auth_asym_id)) && (all_atoms_[i].equalPdbxPDBModelNum("1")) &&
+            (!(all_atoms_[i].isOccupancyZero()))){
             
             if(filter_atom_type == "N")
                 n_atoms_.push_back(all_atoms_[i]);
@@ -200,6 +240,18 @@ void Protein::filterAtoms(std::string filter_atom_type){
                  
         }
     }
+}
+
+std::vector<std::string> Protein::getAminoacidSequence(std::vector<std::pair<std::string,std::string> > aminoacid_codes){
+    std::vector<std::string> aminoacid_sequence;
+    
+    for(int i = 0; i < ca_atoms_.size(); i++){
+        for(int j = 0; j < aminoacid_codes.size(); j++){
+            if(ca_atoms_[i].getAuthCompID() == aminoacid_codes[j].first)
+                aminoacid_sequence.push_back(aminoacid_codes[j].second);
+        }
+    }
+    return aminoacid_sequence;
 }
 
 std::string Protein::getName() const{
@@ -268,40 +320,40 @@ std::vector<double> Protein::getPhiAngles(){
     
     std::vector<double> phi_angles;
     try{
-    phi_angles.push_back(360.0);
-    
-    std::vector< std::vector<Atom> > n_ca_c_triplets = this->getNCACTriplets();
-    
-    if(n_ca_c_triplets.size() == 0){
-        std::string error_message = "Exception in ";
-        error_message.append(name_);
-        error_message.append(" Protein::getPhiAngles: the number of N, CA, C triplets is zero.");
-        std::runtime_error re(error_message);
-        throw re;
-    }
-    
-    for(int i = 1; i < n_ca_c_triplets.size(); i++){
+        phi_angles.push_back(360.0);
         
-        Vector3D b1(n_ca_c_triplets[i][0].getLocation(), n_ca_c_triplets[i-1][2].getLocation());
-        Vector3D b2(n_ca_c_triplets[i][1].getLocation(), n_ca_c_triplets[i][0].getLocation());
-        Vector3D b3(n_ca_c_triplets[i][1].getLocation(), n_ca_c_triplets[i][2].getLocation());
-         
-        Vector3D cross_b3_b2 = b3.crossProduct(b2);
-        Vector3D cross_b1_b2 = b1.crossProduct(b2);
-        Vector3D cross_final = cross_b3_b2.crossProduct(cross_b1_b2);
+        std::vector< std::vector<Atom> > n_ca_c_triplets = this->getNCACTriplets();
         
-        // y is the dot product of b2 and cross_final.
-        double y = b2 * cross_final;
+        if(n_ca_c_triplets.size() == 0){
+            std::string error_message = "Exception in ";
+            error_message.append(name_);
+            error_message.append(" Protein::getPhiAngles: the number of N, CA, C triplets is zero.");
+            std::runtime_error re(error_message);
+            throw re;
+        }
         
-        Vector3D first_of_x = cross_b1_b2 * b2.getLength();
-        
-        // x is the dot product of first_of_x and cross_b3_b2.
-        double x = first_of_x * cross_b3_b2;
-        
-        double phi_angle = atan2(y, x) * 180.00 / PI * (-1);
-        
-        phi_angles.push_back(phi_angle);
-    }
+        for(int i = 1; i < n_ca_c_triplets.size(); i++){
+            
+            Vector3D b1(n_ca_c_triplets[i][0].getLocation(), n_ca_c_triplets[i-1][2].getLocation());
+            Vector3D b2(n_ca_c_triplets[i][1].getLocation(), n_ca_c_triplets[i][0].getLocation());
+            Vector3D b3(n_ca_c_triplets[i][1].getLocation(), n_ca_c_triplets[i][2].getLocation());
+             
+            Vector3D cross_b3_b2 = b3.crossProduct(b2);
+            Vector3D cross_b1_b2 = b1.crossProduct(b2);
+            Vector3D cross_final = cross_b3_b2.crossProduct(cross_b1_b2);
+            
+            // y is the dot product of b2 and cross_final.
+            double y = b2 * cross_final;
+            
+            Vector3D first_of_x = cross_b1_b2 * b2.getLength();
+            
+            // x is the dot product of first_of_x and cross_b3_b2.
+            double x = first_of_x * cross_b3_b2;
+            
+            double phi_angle = atan2(y, x) * 180.00 / PI * (-1);
+            
+            phi_angles.push_back(phi_angle);
+        }
     }catch(const std::runtime_error& re){
         std::cerr << re.what() << std::endl;
     }
@@ -317,41 +369,41 @@ std::vector<double> Protein::getPsiAngles(){
     std::vector<double> psi_angles;
        
     try{
-    std::vector< std::vector<Atom> > n_ca_c_triplets = this->getNCACTriplets();
-    
-    if(n_ca_c_triplets.size() == 0){
-        std::string error_message = "Exception in ";
-        error_message.append(name_);
-        error_message.append(" Protein::getPsiAngles: the number of N, CA, C triplets is zero.");
-        std::runtime_error re(error_message);
-        throw re;
-    }
-       
-    for(int i = 0; i < n_ca_c_triplets.size()-1; i++){
+        std::vector< std::vector<Atom> > n_ca_c_triplets = this->getNCACTriplets();
         
-        Vector3D b1(n_ca_c_triplets[i][1].getLocation(), n_ca_c_triplets[i][0].getLocation());
-        Vector3D b2(n_ca_c_triplets[i][2].getLocation(), n_ca_c_triplets[i][1].getLocation());
-        Vector3D b3(n_ca_c_triplets[i][2].getLocation(), n_ca_c_triplets[i+1][0].getLocation());
+        if(n_ca_c_triplets.size() == 0){
+            std::string error_message = "Exception in ";
+            error_message.append(name_);
+            error_message.append(" Protein::getPsiAngles: the number of N, CA, C triplets is zero.");
+            std::runtime_error re(error_message);
+            throw re;
+        }
+           
+        for(int i = 0; i < n_ca_c_triplets.size()-1; i++){
+            
+            Vector3D b1(n_ca_c_triplets[i][1].getLocation(), n_ca_c_triplets[i][0].getLocation());
+            Vector3D b2(n_ca_c_triplets[i][2].getLocation(), n_ca_c_triplets[i][1].getLocation());
+            Vector3D b3(n_ca_c_triplets[i][2].getLocation(), n_ca_c_triplets[i+1][0].getLocation());
+            
+            Vector3D cross_b3_b2 = b3.crossProduct(b2);
+            Vector3D cross_b1_b2 = b1.crossProduct(b2);
+            Vector3D cross_final = cross_b3_b2.crossProduct(cross_b1_b2);
+            
+            // y is the dot product of b2 and cross_final.
+            double y = b2 * cross_final;
+            
+            Vector3D first_of_x = cross_b1_b2 * b2.getLength();
+            
+            // x is the dot product of first_of_x and cross_b3_b2.
+            double x = first_of_x * cross_b3_b2;
+            
+            double psi_angle = atan2(y, x) * 180.00 / PI * (-1);
+            
+            psi_angles.push_back(psi_angle);
+        }
         
-        Vector3D cross_b3_b2 = b3.crossProduct(b2);
-        Vector3D cross_b1_b2 = b1.crossProduct(b2);
-        Vector3D cross_final = cross_b3_b2.crossProduct(cross_b1_b2);
-        
-        // y is the dot product of b2 and cross_final.
-        double y = b2 * cross_final;
-        
-        Vector3D first_of_x = cross_b1_b2 * b2.getLength();
-        
-        // x is the dot product of first_of_x and cross_b3_b2.
-        double x = first_of_x * cross_b3_b2;
-        
-        double psi_angle = atan2(y, x) * 180.00 / PI * (-1);
-        
-        psi_angles.push_back(psi_angle);
-    }
-    
-   if(all_atoms_[0].getTypeID() == "N")
-        psi_angles.push_back(360.0);
+       if(all_atoms_[0].getTypeID() == "N")
+            psi_angles.push_back(360.0);
         
     }catch(const std::runtime_error& re){
         std::cerr << re.what() << std::endl;

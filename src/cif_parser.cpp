@@ -68,8 +68,14 @@ std::vector<Atom> CIFParser::parseAtoms(){
                 location.setZ(coordinate_z);
             }
             atom.setLocation(location);
+            if(atom_site_columns_[i] == "_atom_site.occupancy"){
+                atom.setOccupancy(atom_row[i]);
+            }
             if(atom_site_columns_[i] == "_atom_site.auth_seq_id"){
                 atom.setAuthSeqID(atom_row[i]);
+            }
+            if(atom_site_columns_[i] == "_atom_site.auth_comp_id"){
+                atom.setAuthCompID(atom_row[i]);
             }
             if(atom_site_columns_[i] == "_atom_site.auth_asym_id"){
                 atom.setAuthAsymID(atom_row[i]);

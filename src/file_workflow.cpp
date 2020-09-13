@@ -173,8 +173,27 @@ std::vector<double> CSVFile::getData(int data_set_choice){
 
 //---class TXTFile
 
+TXTFile::TXTFile(std::string file_name) : File(file_name){
+    
+}
+
 TXTFile::TXTFile(std::string file_name, std::vector<std::string> data) : File(file_name), data_(data){
     
+}
+
+std::vector< std::pair<std::string, std::string> > TXTFile::parsePairedData(){
+    std::vector< std::pair<std::string, std::string> > paired_data;
+    
+    std::ifstream input;
+    input.open(this->getFileName());
+    std::string reading_1, reading_2;
+    while(!input.eof()){
+        input >> reading_1 >> reading_2;
+        std::pair<std::string, std::string> pair = std::make_pair(reading_1, reading_2);
+        paired_data.push_back(pair);
+    }
+    
+    return paired_data;
 }
 
 void TXTFile::setData(std::vector<std::string> data){
@@ -190,3 +209,20 @@ void TXTFile::writeData(std::string output_location){
         output << data_[i] << std::endl;
     }
 }
+
+void TXTFile::writeData(std::string output_location, std::vector<std::string> data_1, std::vector<std::string> data_2){
+    
+    output_location.append(this->getFileName());
+    std::ofstream output;
+    output.open(output_location);
+    
+    for(int i = 0; i < data_1.size(); i++){
+        output << data_1[i];
+    }
+    output << std::endl;
+    for(int i = 0; i < data_1.size(); i++){
+        output << data_2[i];
+    }
+}
+
+
