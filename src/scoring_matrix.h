@@ -45,9 +45,12 @@ class ScoringMatrix{
         double getWestResult(double west_arg, double score);
         double getInitialMaxOper(double north_arg, double north_west_arg, double west_arg);
         double getMaxOperationValue(double max_oper, double north, double north_west, double west);
-    double getMaxOperationValue(double max_oper, double north, double north_west, double west, int& penalty_decision_matrix_element);
+        double getMaxOperationValue(double max_oper, double north, double north_west, double west, int& penalty_decision_matrix_element);
         
-    void fillWithScores(char algorithm_choice, std::vector<int> subunit_chain_P, std::vector<int> subunit_chain_Q, const DistanceScoreMatrix& matrix, char initial);
+        // Older version
+        void fillWithScores(char algorithm_choice, std::vector<int> subunit_chain_P, std::vector<int> subunit_chain_Q, const DistanceScoreMatrix& matrix, char initial);
+    
+        // Newer version (after viewing other code)
         void fillWithScores(char algorithm_choice, std::vector<int> subunit_chain_P, std::vector<int> subunit_chain_Q, const DistanceScoreMatrix& matrix);
     
         DirectionMatrix getDirectionMatrix(char algorithm_choice);

@@ -264,7 +264,7 @@ void ScoringMatrix::algorithmSmithWaterman(std::vector<int> subunit_chain_P, std
 void ScoringMatrix::algorithmNeedlemanWunsch(std::vector<int> subunit_chain_P, std::vector<int> subunit_chain_Q, DistanceScoreMatrix& matrix, int substructure_length, std::vector<std::string> p_aminoacid_sequence, std::vector<std::string> q_aminoacid_sequence, int alignment_representation_choice){
     this->fillWithGapPenalties();
     try{
-        this->fillWithScores('2', subunit_chain_P, subunit_chain_Q, matrix, 'I');
+        this->fillWithScores('2', subunit_chain_P, subunit_chain_Q, matrix);
         
         DirectionMatrix direction_matrix = this->getDirectionMatrix('2');
         //direction_matrix.displayMatrix();
