@@ -47,10 +47,10 @@ class ScoringMatrix{
         double getMaxOperationValue(double max_oper, double north, double north_west, double west);
         double getMaxOperationValue(double max_oper, double north, double north_west, double west, int& penalty_decision_matrix_element);
         
-        // Older version
+        // 1.1 version
         void fillWithScores(char algorithm_choice, std::vector<int> subunit_chain_P, std::vector<int> subunit_chain_Q, const DistanceScoreMatrix& matrix, char initial);
     
-        // Newer version (after viewing other code)
+        // 1.2 version (after viewing other code)
         void fillWithScores(char algorithm_choice, std::vector<int> subunit_chain_P, std::vector<int> subunit_chain_Q, const DistanceScoreMatrix& matrix);
     
         DirectionMatrix getDirectionMatrix(char algorithm_choice);

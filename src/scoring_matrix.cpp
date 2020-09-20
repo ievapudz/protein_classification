@@ -267,8 +267,7 @@ void ScoringMatrix::algorithmNeedlemanWunsch(std::vector<int> subunit_chain_P, s
         this->fillWithScores('2', subunit_chain_P, subunit_chain_Q, matrix);
         
         DirectionMatrix direction_matrix = this->getDirectionMatrix('2');
-        //direction_matrix.displayMatrix();
-        
+    
         SequenceAligner seq_al(direction_matrix.returnDirections(), direction_matrix.returnNonZeroCoords(), subunit_chain_P, subunit_chain_Q);
         
         switch(alignment_representation_choice){
