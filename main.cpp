@@ -5,6 +5,7 @@
 #include "./src/cif_parser.h"
 #include "./src/file_workflow.h"
 #include "./src/block_distance.h"
+#include "./src/constants.hpp"
 
 int main(int argc, const char * argv[]){
     
@@ -70,10 +71,7 @@ int main(int argc, const char * argv[]){
             std::vector<int> chain_P = bdc.getNumberedSubunitChain(1);
             std::vector<int> chain_Q = bdc.getNumberedSubunitChain(2);
             
-            double gap_open_penalty = z_score_max;
-            double gap_ext_penalty = 1;
-            
-            ScoringMatrix sm(chain_P.size() + 1, chain_Q.size() + 1, gap_open_penalty, gap_ext_penalty);
+            ScoringMatrix sm(chain_P.size() + 1, chain_Q.size() + 1, Constants::gapOpenPenalty(), Constants::gapExtPenalty());
             sm.algorithmNeedlemanWunsch(chain_P, chain_Q, dsm, substructure_length, p_aminoacid_sequence, q_aminoacid_sequence, 2);
         }
         
