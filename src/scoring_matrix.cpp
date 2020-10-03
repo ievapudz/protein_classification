@@ -231,7 +231,7 @@ void ScoringMatrix::algorithmSmithWaterman(std::vector<int> subunit_chain_P, std
         
         DirectionMatrix direction_matrix = this->getDirectionMatrix('1');
         
-        SequenceAligner seq_al(direction_matrix.returnDirections(), direction_matrix.returnNonZeroCoords(), subunit_chain_P, subunit_chain_Q);
+        SequenceAligner seq_al(direction_matrix.returnDirections(), direction_matrix.returnNonZeroCoords(), subunit_chain_P, subunit_chain_Q, matrix);
 
         switch(alignment_representation_choice){
             case 1:{
@@ -268,7 +268,7 @@ void ScoringMatrix::algorithmNeedlemanWunsch(std::vector<int> subunit_chain_P, s
         
         DirectionMatrix direction_matrix = this->getDirectionMatrix('2');
     
-        SequenceAligner seq_al(direction_matrix.returnDirections(), direction_matrix.returnNonZeroCoords(), subunit_chain_P, subunit_chain_Q);
+        SequenceAligner seq_al(direction_matrix.returnDirections(), direction_matrix.returnNonZeroCoords(), subunit_chain_P, subunit_chain_Q, matrix);
         
         switch(alignment_representation_choice){
             case 1:{
