@@ -283,6 +283,14 @@ void ScoringMatrix::algorithmNeedlemanWunsch(std::vector<int> subunit_chain_P, s
                 traditional_alignment_file_name.append("_traditional_alignment_file.txt");
                 TXTFile traditional_alignment_file(traditional_alignment_file_name);
                 traditional_alignment_file.writeData("./alignment_results_traditional/", seq_al.getAlignedSequenceP(p_aminoacid_sequence), seq_al.getAlignedSequenceQ(q_aminoacid_sequence));
+                // Writing identity score to file:
+                std::vector<std::string> identity_figure;
+                identity_figure.push_back(std::to_string(seq_al.getIdentity()));
+                std::string identity_score_file_name = std::to_string(substructure_length);
+                identity_score_file_name.append("_identity_score.txt");
+                TXTFile identity_score_file(identity_score_file_name, identity_figure);
+                identity_score_file.writeData("./alignment_results_traditional/");
+                //--------------
                 break;
             }
             default:{

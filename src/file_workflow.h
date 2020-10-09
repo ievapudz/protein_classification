@@ -40,7 +40,7 @@ class CSVFile : public File{
 class TXTFile : public File{
         std::vector<std::string> data_;
     public:
-    TXTFile(std::string file_name);
+        TXTFile(std::string file_name);
         TXTFile(std::string file_name, std::vector<std::string> data);
         std::vector< std::pair<std::string, std::string> > parsePairedData();
         void setData(std::vector<std::string> data);

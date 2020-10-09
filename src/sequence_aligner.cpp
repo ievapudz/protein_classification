@@ -138,7 +138,7 @@ std::vector<std::string> SequenceAligner::getAlignedSequenceP(std::vector<std::s
         }
     }
     
-    std::cout << "from P: " << identity_score_ << std::endl;
+    //std::cout << "from P: " << identity_score_ << std::endl;
     return aligned_p;
 }
 
@@ -171,8 +171,8 @@ std::vector<std::string> SequenceAligner::getAlignedSequenceQ(std::vector<std::s
             this->decreaseIdentityScore(coordinates_[k], q_is_shorter, is_gap_start);
         }
    }
-    std::cout << "from Q: " << identity_score_ << std::endl;
-   return aligned_q;
+//std::cout << "from Q: " << identity_score_ << std::endl;
+    return aligned_q;
 }
 
 double SequenceAligner::getIdentity(){
