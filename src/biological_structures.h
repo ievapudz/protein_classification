@@ -58,13 +58,17 @@ class Protein{
         std::vector<Atom> n_atoms_;
         std::vector<Atom> ca_atoms_;
         std::vector<Atom> c_atoms_;
+    std::vector< std::string > sequence_;
+    std::vector<int> subunit_chain_;
     public:
+        
+    
         Protein();
         Protein(std::string name, std::vector<Atom> all_atoms);
         Protein(std::string name, std::vector<Atom> n_atoms, std::vector<Atom> ca_atoms, std::vector<Atom> c_atoms);
         void setName(std::string name);
         void setAtoms(std::vector<Atom>& atoms);
-    
+    void setSubunitChain(std::vector<int> subunit_chain);
         void filterAtoms(std::string atom_type, std::string auth_asym_id);
     
         std::vector<std::string> getAminoacidSequence(std::vector<std::pair<std::string,std::string> > aminoacid_codes);
@@ -73,6 +77,8 @@ class Protein{
         std::vector<Atom> getAllAtoms() const;
         std::vector<Atom> getAtoms(std::string atom_type) const;
         unsigned int getResidueNumber() const;
+    std::vector<std::string> getSequence() const;
+    std::vector<int> getSubunitChain() const;
     
         std::vector< std::vector<Atom> > getNCACTriplets();
     

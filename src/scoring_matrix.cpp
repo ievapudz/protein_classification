@@ -9,6 +9,14 @@ ScoringMatrix::ScoringMatrix(int rows, int columns, double gap_open_penalty, dou
     
 }
 
+ScoringMatrix::ScoringMatrix(Protein p_protein, Protein q_protein, double gap_open_penalty, double gap_ext_penalty) :
+    rows_(p_protein.getSubunitChain().size() + 1),
+    columns_(q_protein.getSubunitChain().size() + 1),
+    gap_open_penalty_(gap_open_penalty),
+    gap_ext_penalty_(gap_ext_penalty), scoring_matrix_(rows_, std::vector<double>(columns_, 0)){
+        
+}
+
 void ScoringMatrix::setGapOpenPenalty(double gap_open_penalty){
     gap_open_penalty_ = gap_open_penalty;
 }
@@ -288,6 +296,54 @@ void ScoringMatrix::algorithmNeedlemanWunsch(std::vector<int> subunit_chain_P, s
                 identity_figure.push_back(std::to_string(seq_al.getIdentity()));
                 std::string identity_score_file_name = std::to_string(substructure_length);
                 identity_score_file_name.append("_identity_score.txt");
+                TXTFile identity_score_file(identity_score_file_name, identity_figure);
+                identity_score_file.writeData("./alignment_results_traditional/");
+                //--------------
+                break;
+            }
+            default:{
+                std::invalid_argument ia("Exception in ScoringMatrix::algorithmNeedlemanWunsch() invalid algorithm choice.");
+                throw ia;
+            }
+        }
+            
+    }catch(std::out_of_range& oor){
+        std::cerr << "Out of range: " << oor.what() << std::endl;
+    }
+    catch(std::invalid_argument& ia){
+        std::cerr << ia.what() << std::endl;
+    }
+}
+
+void ScoringMatrix::algorithmNeedlemanWunsch(DistanceScoreMatrix& matrix, int substructure_length, Protein p_protein, Protein q_protein, int alignment_representation_choice){
+    this->fillWithGapPenalties();
+    try{
+        this->fillWithScores('2', p_protein.getSubunitChain(), q_protein.getSubunitChain(), matrix);
+        
+        DirectionMatrix direction_matrix = this->getDirectionMatrix('2');
+    
+        SequenceAligner seq_al(direction_matrix.returnDirections(), direction_matrix.returnNonZeroCoords(), p_protein.getSubunitChain(), q_protein.getSubunitChain(), matrix);
+        
+        switch(alignment_representation_choice){
+            case 1:{
+                std::string alignment_file_name = std::to_string(substructure_length);
+                alignment_file_name.append(p_protein.getName()+"_"+q_protein.getName());
+                alignment_file_name.append("_alignment_file.txt");
+                TXTFile alignment_file(alignment_file_name, seq_al.getAlignedSequences());
+                alignment_file.writeData("./alignment_results/");
+                break;
+            }
+            case 2:{
+                std::string traditional_alignment_file_name = std::to_string(substructure_length);
+                traditional_alignment_file_name.append("_"+p_protein.getName()+"_"+q_protein.getName()+"_traditional_alignment_file.txt");
+                //traditional_alignment_file_name.append("_traditional_alignment_file.txt");
+                TXTFile traditional_alignment_file(traditional_alignment_file_name);
+                traditional_alignment_file.writeData("./alignment_results_traditional/", seq_al.getAlignedSequenceP(p_protein.getSequence()), seq_al.getAlignedSequenceQ(q_protein.getSequence()));
+                // Writing identity score to file:
+                std::vector<std::string> identity_figure;
+                identity_figure.push_back(std::to_string(seq_al.getIdentity()));
+                std::string identity_score_file_name = std::to_string(substructure_length);
+                identity_score_file_name.append("_"+p_protein.getName()+"_"+q_protein.getName()+"_identity_score.txt");
                 TXTFile identity_score_file(identity_score_file_name, identity_figure);
                 identity_score_file.writeData("./alignment_results_traditional/");
                 //--------------

@@ -147,15 +147,15 @@ bool Atom::equalPdbxPDBModelNum(std::string pdbx_PDB_model_num) const{
 
 //---class Protein
 
-Protein::Protein() : name_("-"), n_atoms_(), ca_atoms_(), c_atoms_(){
+Protein::Protein() : name_("-"), n_atoms_(), ca_atoms_(), c_atoms_(), sequence_(), subunit_chain_(){
     
 }
 
-Protein::Protein(std::string name, std::vector<Atom> all_atoms) : name_(name), all_atoms_(all_atoms){
+Protein::Protein(std::string name, std::vector<Atom> all_atoms) : name_(name), all_atoms_(all_atoms), sequence_(), subunit_chain_(){
     
 }
 
-Protein::Protein(std::string name, std::vector<Atom> n_atoms, std::vector<Atom> ca_atoms, std::vector<Atom> c_atoms) : name_(name), n_atoms_(n_atoms), ca_atoms_(ca_atoms), c_atoms_(c_atoms){
+Protein::Protein(std::string name, std::vector<Atom> n_atoms, std::vector<Atom> ca_atoms, std::vector<Atom> c_atoms) : name_(name), n_atoms_(n_atoms), ca_atoms_(ca_atoms), c_atoms_(c_atoms), sequence_(), subunit_chain_(){
     
 }
 
@@ -180,6 +180,10 @@ void Protein::setAtoms(std::vector<Atom>& atoms){
     }catch(std::out_of_range& oor){
         std::cerr << "Out of range: " << oor.what() << std::endl;
     }
+}
+
+void Protein::setSubunitChain(std::vector<int> subunit_chain){
+    subunit_chain_ = subunit_chain;
 }
 
 void Protein::filterAtoms(std::string filter_atom_type, std::string auth_asym_id){
@@ -251,6 +255,7 @@ std::vector<std::string> Protein::getAminoacidSequence(std::vector<std::pair<std
                 aminoacid_sequence.push_back(aminoacid_codes[j].second);
         }
     }
+    sequence_ = aminoacid_sequence;
     return aminoacid_sequence;
 }
 
@@ -292,6 +297,14 @@ unsigned int Protein::getResidueNumber() const{
         residue_number = c_atoms_.size();
     
     return residue_number;
+}
+
+std::vector<std::string> Protein::getSequence() const{
+    return sequence_;
+}
+
+std::vector<int> Protein::getSubunitChain() const{
+    return subunit_chain_;
 }
 
 std::vector< std::vector<Atom> > Protein::getNCACTriplets(){

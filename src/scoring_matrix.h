@@ -5,6 +5,7 @@
 #include <utility>
 #include <iomanip>
 #include <stdexcept>
+#include "biological_structures.h"
 #include "traceback.h"
 #include "distance_matrix.h"
 #include "distance_score_matrix.h"
@@ -26,6 +27,7 @@ class ScoringMatrix{
         double gap_ext_penalty_;
     public:
         ScoringMatrix(int rows, int columns, double gap_open_penalty, double gap_ext_penalty);
+    ScoringMatrix(Protein p_protein, Protein q_protein, double gap_open_penalty, double gap_ext_penalty);
     
         void setGapOpenPenalty(double gap_open_penalty);
         void setGapExtPenalty(double gap_ext_penalty);
@@ -58,6 +60,8 @@ class ScoringMatrix{
         void algorithmSmithWaterman(std::vector<int> subunit_chain_P, std::vector<int> subunit_chain_Q, DistanceScoreMatrix& matrix, int substructure_length, std::vector<std::string> p_aminoacid_sequence, std::vector<std::string> q_aminoacid_sequence, int alignment_representation_choice);
     
         void algorithmNeedlemanWunsch(std::vector<int> subunit_chain_P, std::vector<int> subunit_chain_Q, DistanceScoreMatrix& matrix, int substructure_length, std::vector<std::string> p_aminoacid_sequence, std::vector<std::string> q_aminoacid_sequence, int alignment_representation_choice);
+    
+    void algorithmNeedlemanWunsch(DistanceScoreMatrix& matrix, int substructure_length, Protein p_protein, Protein q_protein, int alignment_representation_choice);
 };
 
 #endif

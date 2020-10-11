@@ -42,6 +42,7 @@ class TXTFile : public File{
     public:
         TXTFile(std::string file_name);
         TXTFile(std::string file_name, std::vector<std::string> data);
+    std::vector< std::string > parseData();
         std::vector< std::pair<std::string, std::string> > parsePairedData();
         void setData(std::vector<std::string> data);
         void writeData(std::string output_location);

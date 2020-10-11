@@ -181,6 +181,19 @@ TXTFile::TXTFile(std::string file_name, std::vector<std::string> data) : File(fi
     
 }
 
+std::vector< std::string > TXTFile::parseData(){
+    std::vector< std::string > data;
+    std::ifstream input;
+    input.open(this->getFileName());
+    std::string reading_1;
+    while(!input.eof()){
+        input >> reading_1;
+        data.push_back(reading_1);
+    }
+    data.pop_back();
+    return data;
+}
+
 std::vector< std::pair<std::string, std::string> > TXTFile::parsePairedData(){
     std::vector< std::pair<std::string, std::string> > paired_data;
     
