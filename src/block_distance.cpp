@@ -11,7 +11,6 @@ BlockDistanceCalculator::BlockDistanceCalculator(Protein protein_1, Protein prot
     psi_angles_1_(protein_1.getPsiAngles()),
     phi_angles_2_(protein_2.getPhiAngles()),
     psi_angles_2_(protein_2.getPsiAngles()){
-        
     
 }
 
