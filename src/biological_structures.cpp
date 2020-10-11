@@ -186,6 +186,20 @@ void Protein::setSubunitChain(std::vector<int> subunit_chain){
     subunit_chain_ = subunit_chain;
 }
 
+void Protein::setAminoacidSequence(std::vector<std::pair<std::string,std::string> > aminoacid_codes){
+    // Method should be invoked after atom filtering.
+    
+    std::vector<std::string> aminoacid_sequence;
+    
+    for(int i = 0; i < ca_atoms_.size(); i++){
+        for(int j = 0; j < aminoacid_codes.size(); j++){
+            if(ca_atoms_[i].getAuthCompID() == aminoacid_codes[j].first)
+                aminoacid_sequence.push_back(aminoacid_codes[j].second);
+        }
+    }
+    sequence_ = aminoacid_sequence;
+}
+
 void Protein::filterAtoms(std::string filter_atom_type, std::string auth_asym_id){
     
     std::string current_seq_id = all_atoms_.begin()->getAuthSeqID();

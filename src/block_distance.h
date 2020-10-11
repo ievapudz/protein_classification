@@ -40,9 +40,7 @@ class BlockDistanceCalculator{
         int getRandomIndex(int min, int max);
     
         double getPairDistance(std::pair<double, double> subunit_1, std::pair<double, double> subunit_2, int distance_calculation_choice);
-        
         std::vector<double> getRandomDistances(bool both_random);
-    
         std::vector< std::vector<double> > getSuccessiveDistances(int distance_calculation_choice);
        
 };

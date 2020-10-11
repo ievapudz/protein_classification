@@ -27,7 +27,7 @@ class ScoringMatrix{
         double gap_ext_penalty_;
     public:
         ScoringMatrix(int rows, int columns, double gap_open_penalty, double gap_ext_penalty);
-    ScoringMatrix(Protein p_protein, Protein q_protein, double gap_open_penalty, double gap_ext_penalty);
+        ScoringMatrix(Protein p_protein, Protein q_protein, double gap_open_penalty, double gap_ext_penalty);
     
         void setGapOpenPenalty(double gap_open_penalty);
         void setGapExtPenalty(double gap_ext_penalty);
@@ -48,20 +48,14 @@ class ScoringMatrix{
         double getInitialMaxOper(double north_arg, double north_west_arg, double west_arg);
         double getMaxOperationValue(double max_oper, double north, double north_west, double west);
         double getMaxOperationValue(double max_oper, double north, double north_west, double west, int& penalty_decision_matrix_element);
-        
-        // 1.1 version
-        void fillWithScores(char algorithm_choice, std::vector<int> subunit_chain_P, std::vector<int> subunit_chain_Q, const DistanceScoreMatrix& matrix, char initial);
     
-        // 1.2 version (after viewing other code)
         void fillWithScores(char algorithm_choice, std::vector<int> subunit_chain_P, std::vector<int> subunit_chain_Q, const DistanceScoreMatrix& matrix);
     
         DirectionMatrix getDirectionMatrix(char algorithm_choice);
     
         void algorithmSmithWaterman(std::vector<int> subunit_chain_P, std::vector<int> subunit_chain_Q, DistanceScoreMatrix& matrix, int substructure_length, std::vector<std::string> p_aminoacid_sequence, std::vector<std::string> q_aminoacid_sequence, int alignment_representation_choice);
     
-        void algorithmNeedlemanWunsch(std::vector<int> subunit_chain_P, std::vector<int> subunit_chain_Q, DistanceScoreMatrix& matrix, int substructure_length, std::vector<std::string> p_aminoacid_sequence, std::vector<std::string> q_aminoacid_sequence, int alignment_representation_choice);
-    
-    void algorithmNeedlemanWunsch(DistanceScoreMatrix& matrix, int substructure_length, Protein p_protein, Protein q_protein, int alignment_representation_choice);
+        void algorithmNeedlemanWunsch(DistanceScoreMatrix& matrix, int substructure_length, Protein p_protein, Protein q_protein, int alignment_representation_choice);
 };
 
 #endif

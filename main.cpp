@@ -11,6 +11,8 @@
 int main(int argc, const char * argv[]){
     
     try{
+        Constants constants("./mmCIF_files/", -4, 4, 4.0, 1.0, 1, 7);
+        
         TXTFile aminoacid_code_file("aminoacid_codes.txt");
         std::vector<std::pair<std::string, std::string> > aminoacid_codes = aminoacid_code_file.parsePairedData();
         
@@ -23,9 +25,8 @@ int main(int argc, const char * argv[]){
             auth_asym_ids.push_back(std::string(1, protein_chains[i][5]));
             transform(protein_chains[i].begin(), protein_chains[i].end(), protein_chains[i].begin(), ::tolower);
             protein_chains[i] = protein_chains[i].substr(0, 4);
-            std::string path = "./mmCIF_files/";
-            path.append(protein_chains[i]);
-            path.append(".cif");
+            std::string path = constants.cifFilePath();
+            path.append(protein_chains[i]+".cif");
             protein_chains[i] = path;
             std::cout << protein_chains[i] << std::endl;
         }
@@ -47,23 +48,18 @@ int main(int argc, const char * argv[]){
             p_protein.filterAtoms("N", auth_asym_ids[i]);
             p_protein.filterAtoms("CA", auth_asym_ids[i]);
             p_protein.filterAtoms("C", auth_asym_ids[i]);
-            
-            std::vector<std::string> p_aminoacid_sequence = p_protein.getAminoacidSequence(aminoacid_codes);
+            p_protein.setAminoacidSequence(aminoacid_codes);
             
             Protein q_protein(file_2.getProteinName(), cp_2.parseAtoms());
             
             q_protein.filterAtoms("N", auth_asym_ids[i+1]);
             q_protein.filterAtoms("CA", auth_asym_ids[i+1]);
             q_protein.filterAtoms("C", auth_asym_ids[i+1]);
-            
-            std::vector<std::string> q_aminoacid_sequence = q_protein.getAminoacidSequence(aminoacid_codes);
-            
-            int z_score_min = -4;
-            int z_score_max = 4;
+            q_protein.setAminoacidSequence(aminoacid_codes);
             
             BlockDistanceCalculator bdc(p_protein, q_protein);
             
-            for(int substructure_length = 1; substructure_length <= 7; substructure_length++){
+            for(int substructure_length = constants.minSubstructureLength(); substructure_length <= constants.maxSubstructureLength(); substructure_length++){
                 std::string distance_file_name = "./csv_distance_files/";
                 distance_file_name.append(std::to_string(substructure_length));
                 distance_file_name.append("_length_distances.csv");
@@ -83,18 +79,13 @@ int main(int argc, const char * argv[]){
                 
                 DistanceScoreMatrix dsm(dm.calculateScoreMatrix(mean, standard_deviation));
                 
-                dsm.limitScores(z_score_min, z_score_max);
+                dsm.limitScores(constants.zScoreMin(), constants.zScoreMax());
                 dsm.reverseScoreSigns();
                 
-                std::vector<int> chain_P = bdc.getNumberedSubunitChain(1);
                 p_protein.setSubunitChain(bdc.getNumberedSubunitChain(1));
-                
-                std::vector<int> chain_Q = bdc.getNumberedSubunitChain(2);
                 q_protein.setSubunitChain(bdc.getNumberedSubunitChain(2));
                 
-                ScoringMatrix sm(p_protein, q_protein, Constants::gapOpenPenalty(), Constants::gapExtPenalty());
-                //ScoringMatrix sm(chain_P.size() + 1, chain_Q.size() + 1, Constants::gapOpenPenalty(), Constants::gapExtPenalty());
-                //sm.algorithmNeedlemanWunsch(chain_P, chain_Q, dsm, substructure_length, p_aminoacid_sequence, q_aminoacid_sequence, 2);
+                ScoringMatrix sm(p_protein, q_protein, constants.gapOpenPenalty(), constants.gapExtPenalty());
                 sm.algorithmNeedlemanWunsch(dsm, substructure_length, p_protein, q_protein, 2);
             }
         }
