@@ -2,11 +2,13 @@
 
 //---SequenceAligner class
 
-SequenceAligner::SequenceAligner(std::vector<int> directions, std::vector< std::pair<int, int> > coordinates, std::vector<int> subunit_chain_P, std::vector<int> subunit_chain_Q, DistanceScoreMatrix& score_matrix) :
+SequenceAligner::SequenceAligner(std::vector<int> directions, std::vector< std::pair<int, int> > coordinates, std::vector<int> subunit_chain_P, std::vector<int> subunit_chain_Q, DistanceScoreMatrix& score_matrix, double gap_open_penalty, double gap_ext_penalty) :
     directions_(directions),
     coordinates_(coordinates),
     subunit_chain_P_(subunit_chain_P),
-    subunit_chain_Q_(subunit_chain_Q), identity_score_(0.0), score_matrix_(score_matrix){
+    subunit_chain_Q_(subunit_chain_Q), identity_score_(0.0), score_matrix_(score_matrix),
+    gap_open_penalty_(gap_open_penalty),
+    gap_ext_penalty_(gap_ext_penalty){
         
 }
 
@@ -138,6 +140,10 @@ std::vector<std::string> SequenceAligner::getAlignedSequenceP(std::vector<std::s
         }
     }
     
+    if(p_is_shorter){
+        this->normalizeIdentityScore(subunit_chain_P_.size());
+    }
+    
     //std::cout << "from P: " << identity_score_ << std::endl;
     return aligned_p;
 }
@@ -171,6 +177,10 @@ std::vector<std::string> SequenceAligner::getAlignedSequenceQ(std::vector<std::s
             this->decreaseIdentityScore(coordinates_[k], q_is_shorter, is_gap_start);
         }
    }
+    
+    if(q_is_shorter){
+        this->normalizeIdentityScore(subunit_chain_Q_.size());
+    }
 //std::cout << "from Q: " << identity_score_ << std::endl;
     return aligned_q;
 }
@@ -190,10 +200,14 @@ void SequenceAligner::decreaseIdentityScore(std::pair<int, int> coordinates, boo
     if(is_shorter){
         if(!is_gap_start){
             is_gap_start = true;
-            identity_score_ -= Constants::gapOpenPenalty();
+            identity_score_ -= gap_open_penalty_;
         }else{
-            identity_score_ -= Constants::gapExtPenalty();
+            identity_score_ -= gap_ext_penalty_;
         }
     }
+}
+
+void SequenceAligner::normalizeIdentityScore(int shorter_chain_length){
+    identity_score_ /= shorter_chain_length;
 }
 

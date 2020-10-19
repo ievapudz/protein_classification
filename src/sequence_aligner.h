@@ -20,10 +20,13 @@ class SequenceAligner{
         std::vector< std::pair<int, int> > coordinates_;
         std::vector<int> subunit_chain_P_;
         std::vector<int> subunit_chain_Q_;
-    double identity_score_;
-    DistanceScoreMatrix& score_matrix_;
+        double identity_score_;
+        DistanceScoreMatrix& score_matrix_;
+    
+        double gap_open_penalty_;
+        double gap_ext_penalty_;
     public:
-        SequenceAligner(std::vector<int> directions, std::vector< std::pair<int, int> > coordinates, std::vector<int> subunit_chain_P, std::vector<int> subunit_chain_Q, DistanceScoreMatrix& score_matrix);
+        SequenceAligner(std::vector<int> directions, std::vector< std::pair<int, int> > coordinates, std::vector<int> subunit_chain_P, std::vector<int> subunit_chain_Q, DistanceScoreMatrix& score_matrix, double gap_open_penalty, double gap_ext_penalty);
         
         void displayDirections() const;
         void displayCoordinates() const;
@@ -39,6 +42,7 @@ class SequenceAligner{
         double getIdentity();
         void increaseIdentityScore(std::pair<int, int> coordinates, bool& is_shorter, bool& is_gap_start);
         void decreaseIdentityScore(std::pair<int, int> coordinates, bool& is_shorter, bool& is_gap_start);
+    void normalizeIdentityScore(int shorter_chain_length);
 };
 
 #endif

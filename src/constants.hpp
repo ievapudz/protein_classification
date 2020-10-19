@@ -20,7 +20,7 @@ class Constants{
             gap_ext_penalty_(gap_ext_penalty),
             min_substructure_length_(min_substructure_length),
             max_substructure_length_(max_substructure_length){
-            
+                
         }
         std::string cifFilePath() const{
             return cif_file_path_;

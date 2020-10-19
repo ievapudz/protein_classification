@@ -9,6 +9,7 @@
 class File{
         std::string file_name_;
     public:
+        File();
         File(std::string file_name);
         void setFileName(std::string file_name);
         std::string getFileName() const;
@@ -16,6 +17,7 @@ class File{
 
 class mmCIFFile : public File{
     public:
+        mmCIFFile();
         mmCIFFile(std::string file_name);
         std::string getProteinName();
 };
@@ -24,6 +26,7 @@ class CSVFile : public File{
         std::vector<double> data_1_;
         std::vector<double> data_2_;
     public:
+        CSVFile();
         CSVFile(std::string file_name);
         CSVFile(std::string file_name, std::vector<double> data);
         CSVFile(std::string file_name, std::vector<double> data_1_, std::vector<double> data_2_);

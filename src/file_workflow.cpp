@@ -1,6 +1,9 @@
 #include"file_workflow.h"
 
 //---class File
+File::File() : file_name_("-"){
+    
+}
 
 File::File(std::string file_name) : file_name_(file_name){
     
@@ -16,6 +19,10 @@ std::string File::getFileName() const{
 
 //---class mmCIFFile
 
+mmCIFFile::mmCIFFile() : File(){
+    
+}
+
 mmCIFFile::mmCIFFile(std::string file_name) : File(file_name){
     
 }
@@ -28,6 +35,10 @@ std::string mmCIFFile::getProteinName(){
 }
 
 //---class CSVFile
+
+CSVFile::CSVFile() : File(){
+    
+}
 
 CSVFile::CSVFile(std::string file_name) : File(file_name){
     

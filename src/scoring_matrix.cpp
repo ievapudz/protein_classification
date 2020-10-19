@@ -187,7 +187,7 @@ DirectionMatrix ScoringMatrix::getDirectionMatrix(char algorithm_choice){
 }
 
 void ScoringMatrix::algorithmSmithWaterman(std::vector<int> subunit_chain_P, std::vector<int> subunit_chain_Q, DistanceScoreMatrix& matrix, int substructure_length, std::vector<std::string> p_aminoacid_sequence, std::vector<std::string> q_aminoacid_sequence, int alignment_representation_choice){
-    try{
+    try{/*
         this->fillWithScores('1', subunit_chain_P, subunit_chain_Q, matrix);
         
         DirectionMatrix direction_matrix = this->getDirectionMatrix('1');
@@ -213,7 +213,7 @@ void ScoringMatrix::algorithmSmithWaterman(std::vector<int> subunit_chain_P, std
                 std::invalid_argument ia("Exception in ScoringMatrix::algorithmSmithWaterman() invalid algorithm choice.");
                 throw ia;
             }
-        }
+        }*/
     }catch(std::out_of_range& oor){
         std::cerr << "Out of range: " << oor.what() << std::endl;
     }
@@ -229,7 +229,7 @@ void ScoringMatrix::algorithmNeedlemanWunsch(DistanceScoreMatrix& matrix, int su
         
         DirectionMatrix direction_matrix = this->getDirectionMatrix('2');
     
-        SequenceAligner seq_al(direction_matrix.returnDirections(), direction_matrix.returnNonZeroCoords(), p_protein.getSubunitChain(), q_protein.getSubunitChain(), matrix);
+        SequenceAligner seq_al(direction_matrix.returnDirections(), direction_matrix.returnNonZeroCoords(), p_protein.getSubunitChain(), q_protein.getSubunitChain(), matrix, gap_open_penalty_, gap_ext_penalty_);
         
         switch(alignment_representation_choice){
             case 1:{

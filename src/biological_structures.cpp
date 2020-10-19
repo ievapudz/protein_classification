@@ -163,6 +163,10 @@ void Protein::setName(std::string name){
     name_ = name;
 }
 
+void Protein::setAllAtoms(std::vector<Atom> all_atoms){
+    all_atoms_ = all_atoms;
+}
+
 void Protein::setAtoms(std::vector<Atom>& atoms){
     try{
         if(atoms[0].getTypeID() == "N")

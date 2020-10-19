@@ -7,10 +7,18 @@
 #include "./src/file_workflow.h"
 #include "./src/block_distance.h"
 #include "./src/constants.hpp"
+#include "preparatory_phase.h"
+#include "calculation_phase.h"
 
 int main(int argc, const char * argv[]){
     
     try{
+        /*
+        PreparatoryPhase prep_phase(argv[1]);
+        prep_phase.run(0, 1);
+        CalculationPhase calc_phase(&prep_phase, 6);
+        calc_phase.run();*/
+        
         Constants constants("./mmCIF_files/", -4, 4, 4.0, 1.0, 1, 7);
         
         TXTFile aminoacid_code_file("aminoacid_codes.txt");
@@ -32,6 +40,8 @@ int main(int argc, const char * argv[]){
         }
         
         for(int i = 0; i < protein_chains.size() - 1; i++){
+            long int start = time(NULL);
+            
             mmCIFFile file_1(protein_chains[i]);
             mmCIFFile file_2(protein_chains[i+1]);
             
@@ -67,6 +77,7 @@ int main(int argc, const char * argv[]){
                 CSVFile distance_file(distance_file_name);
                 distance_file.parseOneDataSet(1);
                 
+                // Calculations
                 StatisticCalculator sc;
                 sc.setData(distance_file.getData(1));
                 
@@ -87,7 +98,9 @@ int main(int argc, const char * argv[]){
                 
                 ScoringMatrix sm(p_protein, q_protein, constants.gapOpenPenalty(), constants.gapExtPenalty());
                 sm.algorithmNeedlemanWunsch(dsm, substructure_length, p_protein, q_protein, 2);
+                
             }
+            std::cout << "Duration: " << time(NULL) - start << " seconds" << std::endl;
         }
         
     }catch(const std::length_error& le){

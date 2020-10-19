@@ -68,6 +68,7 @@ class Protein{
         Protein(std::string name, std::vector<Atom> all_atoms);
         Protein(std::string name, std::vector<Atom> n_atoms, std::vector<Atom> ca_atoms, std::vector<Atom> c_atoms);
         void setName(std::string name);
+        void setAllAtoms(std::vector<Atom> all_atoms);
         void setAtoms(std::vector<Atom>& atoms);
         void setSubunitChain(std::vector<int> subunit_chain);
         void setAminoacidSequence(std::vector<std::pair<std::string,std::string> > aminoacid_codes);

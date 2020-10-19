@@ -213,7 +213,6 @@ double BlockDistanceCalculator::getPairDistance(std::pair<double, double> subuni
             // Euclidean distance (before taking the square root from the sum) calculation.
             pair_distance = phi_distance * phi_distance + psi_distance * psi_distance;
             
-            //pair_distance = (subunit_1.first - subunit_2.first)*(subunit_1.first - subunit_2.first) + (subunit_1.second - subunit_2.second)*(subunit_1.second - subunit_2.second);
             break;
         }
     }
