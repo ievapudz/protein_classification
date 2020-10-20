@@ -18,7 +18,7 @@ class DistanceMatrix{
     
         void setMatrix(std::vector< std::vector<double> > matrix);
     
-        std::vector< std::vector<double> > getMatrix() const;
+        const std::vector< std::vector<double> >& getMatrix() const;
         double getElement(int index_row, int index_column) const;
         double getMaxValue();
         double getMinValue();

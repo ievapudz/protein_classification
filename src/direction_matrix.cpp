@@ -11,8 +11,8 @@ void DirectionMatrix::setDirection(int row_coordinate, int column_coordinate, in
     direction_matrix_[row_coordinate][column_coordinate] = direction;
 }
 
-std::vector< std::vector<int> > DirectionMatrix::returnMatrix() const{
-    return this->direction_matrix_;
+const std::vector< std::vector<int> >& DirectionMatrix::returnMatrix() const{
+    return direction_matrix_;
 }
 
 void DirectionMatrix::displayMatrix() const{

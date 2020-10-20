@@ -41,7 +41,7 @@ void DistanceMatrix::setMatrix(std::vector< std::vector<double> > matrix){
     matrix_ = matrix;
 }
 
-std::vector< std::vector<double> > DistanceMatrix::getMatrix() const{
+const std::vector< std::vector<double> >& DistanceMatrix::getMatrix() const{
     return matrix_;
 }
 

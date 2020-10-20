@@ -14,7 +14,7 @@ class DirectionMatrix{
         DirectionMatrix(int rows, int columns);
         void setDirection(int rows_coordinate, int column_coordinate, int direction);
     
-        std::vector< std::vector<int> > returnMatrix() const;
+        const std::vector< std::vector<int> >& returnMatrix() const;
         void displayMatrix() const;
         std::vector< std::pair<int, int> > returnNonZeroCoords() const;
         std::vector<int> returnDirections() const;

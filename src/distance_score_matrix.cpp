@@ -82,7 +82,7 @@ double DistanceScoreMatrix::getMinValue(){
     return min_value;
 }
 
-std::vector< std::vector<double> > DistanceScoreMatrix::getMatrix() const{
+const std::vector< std::vector<double> >& DistanceScoreMatrix::getMatrix() const{
     return matrix_;
 }
 

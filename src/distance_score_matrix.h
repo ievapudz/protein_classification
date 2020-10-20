@@ -21,7 +21,7 @@ class DistanceScoreMatrix{
         
         double getMaxValue();
         double getMinValue();
-        std::vector< std::vector<double> > getMatrix() const;
+        const std::vector< std::vector<double> >& getMatrix() const;
         double getScore(std::pair<int, int> pair) const;
     
         void limitScores(int z_score_min, int z_score_max);
