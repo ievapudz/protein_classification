@@ -105,3 +105,42 @@ std::vector< std::vector<double> > DistanceMatrix::calculateScoreMatrix(double m
     
     return score_matrix;
 }
+
+void DistanceMatrix::modifyToDistanceScoreMatrix(double mean, double standard_deviation, double z_score_min, double z_score_max){
+    for(int i = 0; i < rows_; i++){
+        for(int j = 0; j < columns_; j++){
+            // Calculating score for the distance.
+            double z_score = ( matrix_[i][j] - mean ) / standard_deviation;
+            
+            // Limiting score values to a certain interval.
+            if(z_score < z_score_min){
+                matrix_[i][j] = z_score_min;
+            }
+            else if(z_score > z_score_max){
+                matrix_[i][j] = z_score_max;
+            }
+            else{
+                matrix_[i][j] = z_score;
+            }
+            
+            // Reversing score signs.
+            matrix_[i][j] = (-1)*matrix_[i][j];
+        }
+    }
+}
+
+double DistanceMatrix::getScore(std::pair<int, int> pair) const{
+    // Method that returns score of the corresponding pair of subunits.
+    
+    double score;
+    
+    for(int i = 0; i < rows_; i++){
+        for(int j = 0; j < columns_; j++){
+            if((i+1 == pair.first) && (j+1 == pair.second)){
+                score = matrix_[i][j];
+                break;
+            }
+        }
+    }
+    return score;
+}

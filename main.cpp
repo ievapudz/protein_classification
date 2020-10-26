@@ -13,12 +13,13 @@
 int main(int argc, const char * argv[]){
     
     try{
-        /*
+        
         PreparatoryPhase prep_phase(argv[1]);
         prep_phase.run(0, 1);
         CalculationPhase calc_phase(&prep_phase, 6);
-        calc_phase.run();*/
+        calc_phase.run();
         
+        /*
         Constants constants("./mmCIF_files/", -4, 4, 4.0, 1.0, 1, 7);
         
         TXTFile aminoacid_code_file("aminoacid_codes.txt");
@@ -70,6 +71,7 @@ int main(int argc, const char * argv[]){
             BlockDistanceCalculator bdc(p_protein, q_protein);
             
             for(int substructure_length = constants.minSubstructureLength(); substructure_length <= constants.maxSubstructureLength(); substructure_length++){
+                //for(int substructure_length = 6; substructure_length <= 6; substructure_length++){
                 std::string distance_file_name = "./csv_distance_files/";
                 distance_file_name.append(std::to_string(substructure_length));
                 distance_file_name.append("_length_distances.csv");
@@ -101,7 +103,7 @@ int main(int argc, const char * argv[]){
                 
             }
             std::cout << "Duration: " << time(NULL) - start << " seconds" << std::endl;
-        }
+        }*/
         
     }catch(const std::length_error& le){
         std::cerr << le.what() << std::endl;

@@ -28,6 +28,7 @@ void PreparatoryPhase::setProtein(char protein, int index){
         p_protein_.filterAtoms("N", auth_asym_ids_[index]);
         p_protein_.filterAtoms("CA", auth_asym_ids_[index]);
         p_protein_.filterAtoms("C", auth_asym_ids_[index]);
+        p_protein_.setAminoacidSequence(aminoacid_codes_);
     }else{
         q_mmCIF_file_.setFileName(protein_chains_[index]);
         q_parser_.setFilePath(protein_chains_[index]);
@@ -37,6 +38,7 @@ void PreparatoryPhase::setProtein(char protein, int index){
         q_protein_.filterAtoms("N", auth_asym_ids_[index]);
         q_protein_.filterAtoms("CA", auth_asym_ids_[index]);
         q_protein_.filterAtoms("C", auth_asym_ids_[index]);
+        q_protein_.setAminoacidSequence(aminoacid_codes_);
     }
 }
 

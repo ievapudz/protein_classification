@@ -3,7 +3,8 @@
 #include <iostream>
 #include <vector>
 #include <stdexcept>
-#include <iomanip> 
+#include <iomanip>
+#include <utility>
 #include "statistic_calculator.h"
 
 class DistanceMatrix{
@@ -27,6 +28,8 @@ class DistanceMatrix{
         double getStandardDeviation(StatisticCalculator& statistic_calculator);
     
         std::vector< std::vector<double> > calculateScoreMatrix(double mean, double standard_deviation);
+    void modifyToDistanceScoreMatrix(double mean, double standard_deviation, double z_score_min, double z_score_max);
+    double getScore(std::pair<int, int> pair) const;
 };
 
 #endif

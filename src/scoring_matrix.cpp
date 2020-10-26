@@ -174,6 +174,51 @@ void ScoringMatrix::fillWithScores(char algorithm_choice, std::vector<int> subun
     }
 }
 
+void ScoringMatrix::fillWithScores(char algorithm_choice, std::vector<int> subunit_chain_P, std::vector<int> subunit_chain_Q, const DistanceMatrix& matrix){
+    
+    double north, north_west, west;
+    int gap_ext_count = 0;
+    double max_oper;
+    
+    PenaltyDecisionMatrix penalty_decision_matrix(rows_, columns_);
+    penalty_decision_matrix.fillMatrix();
+    
+    for(int i = 1; i < rows_; i++){
+        for(int j = 1; j < columns_; j++){
+            // Pair holds numbers of subunits in aminoacid sequence.
+            std::pair<int, int> pair = this->getPair(subunit_chain_P[i-1], subunit_chain_Q[j-1]);
+            
+            north_west = this->getNorthWestResult(scoring_matrix_[i-1][j-1], matrix.getScore(pair));
+            
+            if(penalty_decision_matrix.getMatrix()[i-1][j] != 1){
+                north = this->getNorthResult(scoring_matrix_[i-1][j], gap_open_penalty_);
+            }else{
+                north = this->getNorthResult(scoring_matrix_[i-1][j], gap_ext_penalty_);
+            }
+            
+            if(penalty_decision_matrix.getMatrix()[i][j-1] != 2){
+                west = this->getWestResult(scoring_matrix_[i][j-1], gap_open_penalty_);
+            }else{
+                west = this->getWestResult(scoring_matrix_[i][j-1], gap_ext_penalty_);
+            }
+            
+            if(algorithm_choice == '1'){
+                max_oper = 0;
+            }
+            else if(algorithm_choice == '2'){
+                max_oper = this->getInitialMaxOper(scoring_matrix_[i][j-1], scoring_matrix_[i-1][j-1], scoring_matrix_[i-1][j]);
+            }
+            else{
+                std::invalid_argument ia("Exception in ScoringMatrix::fillWithScores() invalid algorithm choice.");
+                throw ia;
+            }
+            // Finding and setting the max value from operations.
+            scoring_matrix_[i][j] = this->getMaxOperationValue(max_oper, north, north_west, west, penalty_decision_matrix.getMatrix()[i][j]);
+            
+        }
+    }
+}
+
 DirectionMatrix ScoringMatrix::getDirectionMatrix(char algorithm_choice){
     
     DirectionMatrix direction_matrix(rows_, columns_);
@@ -229,7 +274,8 @@ void ScoringMatrix::algorithmNeedlemanWunsch(DistanceScoreMatrix& matrix, int su
         
         DirectionMatrix direction_matrix = this->getDirectionMatrix('2');
     
-        SequenceAligner seq_al(direction_matrix.returnDirections(), direction_matrix.returnNonZeroCoords(), p_protein.getSubunitChain(), q_protein.getSubunitChain(), matrix, gap_open_penalty_, gap_ext_penalty_);
+        //SequenceAligner seq_al(direction_matrix.returnDirections(), direction_matrix.returnNonZeroCoords(), p_protein.getSubunitChain(), q_protein.getSubunitChain(), matrix, gap_open_penalty_, gap_ext_penalty_);
+        SequenceAligner seq_al(direction_matrix.returnDirections(), direction_matrix.returnNonZeroCoords(), p_protein.getSubunitChain(), q_protein.getSubunitChain(), gap_open_penalty_, gap_ext_penalty_);
         
         switch(alignment_representation_choice){
             case 1:{
@@ -245,13 +291,14 @@ void ScoringMatrix::algorithmNeedlemanWunsch(DistanceScoreMatrix& matrix, int su
                 traditional_alignment_file_name.append("_"+p_protein.getName()+"_"+q_protein.getName()+"_traditional_alignment_file.txt");
                 TXTFile traditional_alignment_file(traditional_alignment_file_name);
                 traditional_alignment_file.writeData("./alignment_results_traditional/", seq_al.getAlignedSequenceP(p_protein.getSequence()), seq_al.getAlignedSequenceQ(q_protein.getSequence()));
+                /*
                 // Writing identity score to file:
                 std::vector<std::string> identity_figure;
                 identity_figure.push_back(std::to_string(seq_al.getIdentity()));
                 std::string identity_score_file_name = std::to_string(substructure_length);
                 identity_score_file_name.append("_"+p_protein.getName()+"_"+q_protein.getName()+"_identity_score.txt");
                 TXTFile identity_score_file(identity_score_file_name, identity_figure);
-                identity_score_file.writeData("./alignment_results_traditional/");
+                identity_score_file.writeData("./alignment_results_traditional/");*/
                 //--------------
                 break;
             }

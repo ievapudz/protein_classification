@@ -21,12 +21,14 @@ class SequenceAligner{
         std::vector<int> subunit_chain_P_;
         std::vector<int> subunit_chain_Q_;
         double identity_score_;
-        DistanceScoreMatrix& score_matrix_;
+        //DistanceScoreMatrix& score_matrix_;
     
         double gap_open_penalty_;
         double gap_ext_penalty_;
     public:
-        SequenceAligner(std::vector<int> directions, std::vector< std::pair<int, int> > coordinates, std::vector<int> subunit_chain_P, std::vector<int> subunit_chain_Q, DistanceScoreMatrix& score_matrix, double gap_open_penalty, double gap_ext_penalty);
+    SequenceAligner();
+    SequenceAligner(std::vector<int> directions, std::vector< std::pair<int, int> > coordinates, std::vector<int> subunit_chain_P, std::vector<int> subunit_chain_Q, double gap_open_penalty, double gap_ext_penalty);
+        //SequenceAligner(std::vector<int> directions, std::vector< std::pair<int, int> > coordinates, std::vector<int> subunit_chain_P, std::vector<int> subunit_chain_Q, DistanceScoreMatrix& score_matrix, double gap_open_penalty, double gap_ext_penalty);
         
         void displayDirections() const;
         void displayCoordinates() const;
