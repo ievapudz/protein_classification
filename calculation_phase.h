@@ -15,6 +15,7 @@ class CalculationPhase{
         
         BlockDistanceCalculator block_distance_calc_;
         StatisticCalculator statistic_calc_;
+    SequenceAligner seq_al_;
         
         double mean_;
         double standard_deviation_;
@@ -28,8 +29,7 @@ class CalculationPhase{
         void setStandardDeviation();
         DistanceMatrix calculateDistanceScoreMatrix();
         DirectionMatrix algorithmNeedlemanWunsch(DistanceMatrix& matrix);
-        void align(DirectionMatrix& matrix);
-    void evaluateIdentity(DistanceMatrix& distance_matrix, DirectionMatrix& direction_matrix);
+        void align(DirectionMatrix& direction_matrix, DistanceMatrix* distance_matrix);
         void run();
 };
 

@@ -56,6 +56,19 @@ void CSVFile::parseOneDataSet(int data_set_choice){
     std::ifstream input;
     input.open(this->getFileName());
     
+    switch (data_set_choice) {
+        case 1:
+            if(data_1_.size()>0){
+                data_1_.clear();
+            }
+            break;
+        case 2:
+            if(data_2_.size()>0){
+                data_2_.clear();
+            }
+            break;
+    }
+    
     std::string reading_label;
     double reading_data;
     

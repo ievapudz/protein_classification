@@ -16,8 +16,10 @@ int main(int argc, const char * argv[]){
         
         PreparatoryPhase prep_phase(argv[1]);
         prep_phase.run(0, 1);
-        CalculationPhase calc_phase(&prep_phase, 6);
-        calc_phase.run();
+        for(int i = prep_phase.constants_.minSubstructureLength(); i <= prep_phase.constants_.maxSubstructureLength(); i++){
+            CalculationPhase calc_phase(&prep_phase, i);
+            calc_phase.run();
+        }
         
         /*
         Constants constants("./mmCIF_files/", -4, 4, 4.0, 1.0, 1, 7);

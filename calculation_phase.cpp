@@ -3,9 +3,7 @@
 CalculationPhase::CalculationPhase(PreparatoryPhase* preparatory, int substructure_length) : preparatory_(preparatory), substructure_length_(substructure_length), block_distance_calc_(preparatory->p_protein_, preparatory->q_protein_){
 
     preparatory_->setDistanceFile("./csv_distance_files/", substructure_length_);
-    
     statistic_calc_.setData(preparatory_->distance_file_.getData(1));
-    
     block_distance_calc_.setSubstructureLength(substructure_length_);
     
 }
@@ -32,11 +30,20 @@ DirectionMatrix CalculationPhase::algorithmNeedlemanWunsch(DistanceMatrix& matri
     return sm.getDirectionMatrix('2');
 }
 
-void CalculationPhase::align(DirectionMatrix& matrix){
+void CalculationPhase::align(DirectionMatrix& direction_matrix, DistanceMatrix* distance_matrix){
     
-    SequenceAligner seq_al_(matrix.returnDirections(), matrix.returnNonZeroCoords(), preparatory_->p_protein_.getSubunitChain(), preparatory_->q_protein_.getSubunitChain(), preparatory_->constants_.gapOpenPenalty(), preparatory_->constants_.gapExtPenalty());
+    seq_al_.setDirections(direction_matrix.returnDirections());
+    seq_al_.setCoordinates(direction_matrix.returnNonZeroCoords());
+    seq_al_.setSubunitChainP(preparatory_->p_protein_.getSubunitChain());
+    seq_al_.setSubunitChainQ(preparatory_->q_protein_.getSubunitChain());
+    seq_al_.setScoreMatrix(distance_matrix);
+    seq_al_.setGapOpenPenalty(preparatory_->constants_.gapOpenPenalty());
+    seq_al_.setGapExtPenalty(preparatory_->constants_.gapExtPenalty());
+    
+    double identity_score_by_p = 0.0;
+    double identity_score_by_q = 0.0;
    
-    alignment_ = std::make_pair( seq_al_.getAlignedSequenceP(preparatory_->p_protein_.getSequence()), seq_al_.getAlignedSequenceQ(preparatory_->q_protein_.getSequence()));
+    alignment_ = std::make_pair( seq_al_.getAlignedSequenceP(preparatory_->p_protein_.getSequence(), identity_score_by_p), seq_al_.getAlignedSequenceQ(preparatory_->q_protein_.getSequence(), identity_score_by_q));
     
     for(int i = 0; i < alignment_.first.size(); i++){
         std::cout << alignment_.first[i];
@@ -46,11 +53,8 @@ void CalculationPhase::align(DirectionMatrix& matrix){
     for(int i = 0; i < alignment_.second.size(); i++){
         std::cout << alignment_.second[i];
     }
-}
-
-void CalculationPhase::evaluateIdentity(DistanceMatrix& distance_matrix, DirectionMatrix& direction_matrix){
     
-   
+    identity_ = std::make_pair(identity_score_by_p, identity_score_by_q);
 }
 
 void CalculationPhase::run(){
@@ -63,6 +67,8 @@ void CalculationPhase::run(){
     preparatory_->q_protein_.setSubunitChain(block_distance_calc_.getNumberedSubunitChain(2));
     
     DirectionMatrix direction_matrix = this->algorithmNeedlemanWunsch(distance_matrix);
-    this->align(direction_matrix);
+    this->align(direction_matrix, &distance_matrix);
+    
+    std::cout << identity_.first << " " << identity_.second << std::endl;
 }
 
