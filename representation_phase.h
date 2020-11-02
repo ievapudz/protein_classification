@@ -10,9 +10,9 @@ class RepresentationPhase{
         Protein& q_protein_;
     public:
         RepresentationPhase(CalculationPhase* calculations);
-    void representAlignment();
-    void representNumeralAlignment();
-    void representIdentityScore();
+        void representAlignment();
+        void representNumeralAlignment();
+        void representIdentityScore();
 };
 
 
