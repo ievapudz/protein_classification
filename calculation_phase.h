@@ -15,21 +15,28 @@ class CalculationPhase{
         
         BlockDistanceCalculator block_distance_calc_;
         StatisticCalculator statistic_calc_;
-    SequenceAligner seq_al_;
+        SequenceAligner seq_al_;
         
         double mean_;
         double standard_deviation_;
     
         std::pair< std::vector<std::string>, std::vector<std::string> > alignment_;
-    std::pair<double, double> identity_;
+        std::pair<double, double> identity_;
         
     public:
         CalculationPhase(PreparatoryPhase* preparatory, int substructure_length);
         void setMean();
         void setStandardDeviation();
+    
+        PreparatoryPhase* getPreparatory();
+        int getSubstructureLength();
+        std::pair< std::vector<std::string>, std::vector<std::string> >& getAlignment();
+        std::pair<double, double> getIdentity();
+    
         DistanceMatrix calculateDistanceScoreMatrix();
         DirectionMatrix algorithmNeedlemanWunsch(DistanceMatrix& matrix);
         void align(DirectionMatrix& direction_matrix, DistanceMatrix* distance_matrix);
+    void alignNumerally(DirectionMatrix& direction_matrix, DistanceMatrix* distance_matrix);
         void run();
 };
 

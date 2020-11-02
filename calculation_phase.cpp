@@ -16,6 +16,22 @@ void CalculationPhase::setStandardDeviation(){
     standard_deviation_ = statistic_calc_.getStandardDeviation();
 }
 
+PreparatoryPhase* CalculationPhase::getPreparatory(){
+    return preparatory_;
+}
+
+int CalculationPhase::getSubstructureLength(){
+    return substructure_length_;
+}
+
+std::pair< std::vector<std::string>, std::vector<std::string> >& CalculationPhase::getAlignment(){
+    return alignment_;
+}
+
+std::pair<double, double> CalculationPhase::getIdentity(){
+    return identity_;
+}
+
 DistanceMatrix CalculationPhase::calculateDistanceScoreMatrix(){
     DistanceMatrix dm(block_distance_calc_.getSuccessiveDistances(1));
     // Calculating scores for distances in the matrix, limiting them to the interval and reversing the signs.
@@ -45,16 +61,11 @@ void CalculationPhase::align(DirectionMatrix& direction_matrix, DistanceMatrix* 
    
     alignment_ = std::make_pair( seq_al_.getAlignedSequenceP(preparatory_->p_protein_.getSequence(), identity_score_by_p), seq_al_.getAlignedSequenceQ(preparatory_->q_protein_.getSequence(), identity_score_by_q));
     
-    for(int i = 0; i < alignment_.first.size(); i++){
-        std::cout << alignment_.first[i];
-    }
-    std::cout << std::endl;
-    
-    for(int i = 0; i < alignment_.second.size(); i++){
-        std::cout << alignment_.second[i];
-    }
-    
     identity_ = std::make_pair(identity_score_by_p, identity_score_by_q);
+}
+
+void CalculationPhase::alignNumerally(DirectionMatrix& direction_matrix, DistanceMatrix* distance_matrix){
+    
 }
 
 void CalculationPhase::run(){
@@ -68,7 +79,5 @@ void CalculationPhase::run(){
     
     DirectionMatrix direction_matrix = this->algorithmNeedlemanWunsch(distance_matrix);
     this->align(direction_matrix, &distance_matrix);
-    
-    std::cout << identity_.first << " " << identity_.second << std::endl;
 }
 

@@ -9,6 +9,7 @@
 #include "./src/constants.hpp"
 #include "preparatory_phase.h"
 #include "calculation_phase.h"
+#include "representation_phase.h"
 
 int main(int argc, const char * argv[]){
     
@@ -19,6 +20,9 @@ int main(int argc, const char * argv[]){
         for(int i = prep_phase.constants_.minSubstructureLength(); i <= prep_phase.constants_.maxSubstructureLength(); i++){
             CalculationPhase calc_phase(&prep_phase, i);
             calc_phase.run();
+            RepresentationPhase repr_phase(&calc_phase);
+            repr_phase.representAlignment();
+            repr_phase.representIdentityScore();
         }
         
         /*

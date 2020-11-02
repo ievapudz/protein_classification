@@ -3,11 +3,14 @@ CXXFLAGS = -O3
 
 all: structural_alignment 
 
-structural_alignment: main.o calculation_phase.o preparatory_phase.o constants.o cif_parser.o file_workflow.o geometry.o biological_structures.o block_distance.o distance_matrix.o distance_score_matrix.o scoring_matrix.o penalty_decision_matrix.o direction_matrix.o traceback.o sequence_aligner.o statistic_calculator.o
-	${CXX} main.o calculation_phase.o preparatory_phase.o cif_parser.o file_workflow.o geometry.o biological_structures.o block_distance.o distance_matrix.o distance_score_matrix.o scoring_matrix.o penalty_decision_matrix.o direction_matrix.o sequence_aligner.o traceback.o statistic_calculator.o -o structural_alignment
+structural_alignment: main.o representation_phase.o calculation_phase.o preparatory_phase.o constants.o cif_parser.o file_workflow.o geometry.o biological_structures.o block_distance.o distance_matrix.o distance_score_matrix.o scoring_matrix.o penalty_decision_matrix.o direction_matrix.o traceback.o sequence_aligner.o statistic_calculator.o
+	${CXX} main.o representation_phase.o calculation_phase.o preparatory_phase.o cif_parser.o file_workflow.o geometry.o biological_structures.o block_distance.o distance_matrix.o distance_score_matrix.o scoring_matrix.o penalty_decision_matrix.o direction_matrix.o sequence_aligner.o traceback.o statistic_calculator.o -o structural_alignment
 
 main.o: main.cpp ./src/biological_structures.h preparatory_phase.h calculation_phase.h
 	${CXX} ${CXXFLAGS} main.cpp ./src/biological_structures.cpp preparatory_phase.cpp calculation_phase.cpp -c
+
+representation_phase.o: representation_phase.h calculation_phase.h ./src/file_workflow.h ./src/biological_structures.h 
+	${CXX} ${CXXFLAGS} representation_phase.cpp calculation_phase.cpp ./src/file_workflow.cpp ./src/biological_structures.cpp -c
 
 calculation_phase.o: calculation_phase.h preparatory_phase.h ./src/block_distance.h ./src/statistic_calculator.h ./src/distance_matrix.h ./src/scoring_matrix.h
 	${CXX} ${CXXFLAGS} calculation_phase.cpp preparatory_phase.cpp ./src/block_distance.cpp ./src/statistic_calculator.cpp ./src/distance_matrix.cpp ./src/scoring_matrix.cpp -c
