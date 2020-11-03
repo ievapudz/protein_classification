@@ -230,9 +230,9 @@ DirectionMatrix ScoringMatrix::getDirectionMatrix(char algorithm_choice){
     
     return direction_matrix;
 }
-
+/*
 void ScoringMatrix::algorithmSmithWaterman(std::vector<int> subunit_chain_P, std::vector<int> subunit_chain_Q, DistanceScoreMatrix& matrix, int substructure_length, std::vector<std::string> p_aminoacid_sequence, std::vector<std::string> q_aminoacid_sequence, int alignment_representation_choice){
-    try{/*
+    try{
         this->fillWithScores('1', subunit_chain_P, subunit_chain_Q, matrix);
         
         DirectionMatrix direction_matrix = this->getDirectionMatrix('1');
@@ -258,7 +258,7 @@ void ScoringMatrix::algorithmSmithWaterman(std::vector<int> subunit_chain_P, std
                 std::invalid_argument ia("Exception in ScoringMatrix::algorithmSmithWaterman() invalid algorithm choice.");
                 throw ia;
             }
-        }*/
+        }
     }catch(std::out_of_range& oor){
         std::cerr << "Out of range: " << oor.what() << std::endl;
     }
@@ -267,54 +267,7 @@ void ScoringMatrix::algorithmSmithWaterman(std::vector<int> subunit_chain_P, std
     }
 }
 
-void ScoringMatrix::algorithmNeedlemanWunsch(DistanceScoreMatrix& matrix, int substructure_length, Protein p_protein, Protein q_protein, int alignment_representation_choice){
-    this->fillWithGapPenalties();
-    try{
-        this->fillWithScores('2', p_protein.getSubunitChain(), q_protein.getSubunitChain(), matrix);
-        
-        DirectionMatrix direction_matrix = this->getDirectionMatrix('2');
-    
-        //SequenceAligner seq_al(direction_matrix.returnDirections(), direction_matrix.returnNonZeroCoords(), p_protein.getSubunitChain(), q_protein.getSubunitChain(), matrix, gap_open_penalty_, gap_ext_penalty_);
-        SequenceAligner seq_al(direction_matrix.returnDirections(), direction_matrix.returnNonZeroCoords(), p_protein.getSubunitChain(), q_protein.getSubunitChain(), gap_open_penalty_, gap_ext_penalty_);
-        
-        switch(alignment_representation_choice){
-            case 1:{
-                std::string alignment_file_name = std::to_string(substructure_length);
-                alignment_file_name.append(p_protein.getName()+"_"+q_protein.getName());
-                alignment_file_name.append("_alignment_file.txt");
-                TXTFile alignment_file(alignment_file_name, seq_al.getAlignedSequences());
-                alignment_file.writeData("./alignment_results/");
-                break;
-            }
-            case 2:{
-                std::string traditional_alignment_file_name = std::to_string(substructure_length);
-                traditional_alignment_file_name.append("_"+p_protein.getName()+"_"+q_protein.getName()+"_traditional_alignment_file.txt");
-                TXTFile traditional_alignment_file(traditional_alignment_file_name);
-                traditional_alignment_file.writeData("./alignment_results_traditional/", seq_al.getAlignedSequenceP(p_protein.getSequence()), seq_al.getAlignedSequenceQ(q_protein.getSequence()));
-                /*
-                // Writing identity score to file:
-                std::vector<std::string> identity_figure;
-                identity_figure.push_back(std::to_string(seq_al.getIdentity()));
-                std::string identity_score_file_name = std::to_string(substructure_length);
-                identity_score_file_name.append("_"+p_protein.getName()+"_"+q_protein.getName()+"_identity_score.txt");
-                TXTFile identity_score_file(identity_score_file_name, identity_figure);
-                identity_score_file.writeData("./alignment_results_traditional/");*/
-                //--------------
-                break;
-            }
-            default:{
-                std::invalid_argument ia("Exception in ScoringMatrix::algorithmNeedlemanWunsch() invalid algorithm choice.");
-                throw ia;
-            }
-        }
-            
-    }catch(std::out_of_range& oor){
-        std::cerr << "Out of range: " << oor.what() << std::endl;
-    }
-    catch(std::invalid_argument& ia){
-        std::cerr << ia.what() << std::endl;
-    }
-}
+*/
 
 
 

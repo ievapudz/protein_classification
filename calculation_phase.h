@@ -36,7 +36,7 @@ class CalculationPhase{
         DistanceMatrix calculateDistanceScoreMatrix();
         DirectionMatrix algorithmNeedlemanWunsch(DistanceMatrix& matrix);
         void align(DirectionMatrix& direction_matrix, DistanceMatrix* distance_matrix);
-    void alignNumerally(DirectionMatrix& direction_matrix, DistanceMatrix* distance_matrix);
+        void alignNumerally(DirectionMatrix& direction_matrix, DistanceMatrix* distance_matrix);
         void run();
 };
 

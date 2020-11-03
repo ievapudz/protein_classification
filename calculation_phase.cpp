@@ -65,7 +65,20 @@ void CalculationPhase::align(DirectionMatrix& direction_matrix, DistanceMatrix* 
 }
 
 void CalculationPhase::alignNumerally(DirectionMatrix& direction_matrix, DistanceMatrix* distance_matrix){
+    seq_al_.setDirections(direction_matrix.returnDirections());
+    seq_al_.setCoordinates(direction_matrix.returnNonZeroCoords());
+    seq_al_.setSubunitChainP(preparatory_->p_protein_.getSubunitChain());
+    seq_al_.setSubunitChainQ(preparatory_->q_protein_.getSubunitChain());
+    seq_al_.setScoreMatrix(distance_matrix);
+    seq_al_.setGapOpenPenalty(preparatory_->constants_.gapOpenPenalty());
+    seq_al_.setGapExtPenalty(preparatory_->constants_.gapExtPenalty());
     
+    double identity_score_by_p = 0.0;
+    double identity_score_by_q = 0.0;
+   
+    alignment_ = std::make_pair( seq_al_.getAlignedSequencePNumerally(preparatory_->p_protein_.getSequence(), identity_score_by_p), seq_al_.getAlignedSequenceQNumerally(preparatory_->q_protein_.getSequence(), identity_score_by_q));
+    
+    identity_ = std::make_pair(identity_score_by_p, identity_score_by_q);
 }
 
 void CalculationPhase::run(){
