@@ -54,9 +54,6 @@ class ScoringMatrix{
     
         DirectionMatrix getDirectionMatrix(char algorithm_choice);
     
-        void algorithmSmithWaterman(std::vector<int> subunit_chain_P, std::vector<int> subunit_chain_Q, DistanceScoreMatrix& matrix, int substructure_length, std::vector<std::string> p_aminoacid_sequence, std::vector<std::string> q_aminoacid_sequence, int alignment_representation_choice);
-    
-        void algorithmNeedlemanWunsch(DistanceScoreMatrix& matrix, int substructure_length, Protein p_protein, Protein q_protein, int alignment_representation_choice);
 };
 
 #endif

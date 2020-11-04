@@ -29,7 +29,6 @@ class SequenceAligner{
     public:
         SequenceAligner();
         SequenceAligner(std::vector<int> directions, std::vector< std::pair<int, int> > coordinates, std::vector<int> subunit_chain_P, std::vector<int> subunit_chain_Q, double gap_open_penalty, double gap_ext_penalty);
-            //SequenceAligner(std::vector<int> directions, std::vector< std::pair<int, int> > coordinates, std::vector<int> subunit_chain_P, std::vector<int> subunit_chain_Q, DistanceScoreMatrix& score_matrix, double gap_open_penalty, double gap_ext_penalty);
         
         void setDirections(std::vector<int> directions);
         void setCoordinates(std::vector< std::pair<int, int> > coordinates);
@@ -41,21 +40,16 @@ class SequenceAligner{
         
         void displayDirections() const;
         void displayCoordinates() const;
-        void alignSequences();
     
-        std::vector<std::string> getAlignedSequenceP();
-        std::vector<std::string> getAlignedSequenceQ();
-        std::vector<std::string> getAlignedSequences();
-    
-        std::vector<std::string> getAlignedSequenceP(std::vector<std::string> p_aminoacid_sequence);
-        std::vector<std::string> getAlignedSequenceQ(std::vector<std::string> q_aminoacid_sequence);
         std::vector<std::string> getAlignedSequenceP(std::vector<std::string> p_aminoacid_sequence, double& score_normed_by_P);
         std::vector<std::string> getAlignedSequenceQ(std::vector<std::string> q_aminoacid_sequence, double& score_normed_by_Q);
+        std::vector<std::string> getAlignedSequencePNumerally(std::vector<std::string> p_aminoacid_sequence, double& score_normed_by_P);
+        std::vector<std::string> getAlignedSequenceQNumerally(std::vector<std::string> q_aminoacid_sequence, double& score_normed_by_Q);
     
         double getIdentity();
         void increaseIdentityScore(std::pair<int, int> coordinates, bool& is_gap_start);
         void decreaseIdentityScore(std::pair<int, int> coordinates, bool& is_gap_start);
-    void normalizeIdentityScore(int chain_length);
+        void normalizeIdentityScore(int chain_length);
 };
 
 #endif
