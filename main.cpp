@@ -21,7 +21,7 @@ int main(int argc, const char * argv[]){
             CalculationPhase calc_phase(&prep_phase, i);
             calc_phase.run();
             RepresentationPhase repr_phase(&calc_phase);
-            repr_phase.representAlignment();
+            repr_phase.representNumeralAlignment();
             repr_phase.representIdentityScore();
         }
         
