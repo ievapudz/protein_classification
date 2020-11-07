@@ -43,8 +43,6 @@ class SequenceAligner{
     
         std::vector<std::string> getAlignedSequenceP(std::vector<std::string> p_aminoacid_sequence, double& score_normed_by_P);
         std::vector<std::string> getAlignedSequenceQ(std::vector<std::string> q_aminoacid_sequence, double& score_normed_by_Q);
-        std::vector<std::string> getAlignedSequencePNumerally(std::vector<std::string> p_aminoacid_sequence, double& score_normed_by_P);
-        std::vector<std::string> getAlignedSequenceQNumerally(std::vector<std::string> q_aminoacid_sequence, double& score_normed_by_Q);
     
         std::vector<std::string> getAlignedSequencePNumeral(std::vector<std::string> p_aminoacid_sequence, double& score_normed_by_P);
         std::vector<std::string> getAlignedSequenceQNumeral(std::vector<std::string> q_aminoacid_sequence, double& score_normed_by_Q);

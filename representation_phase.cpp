@@ -16,7 +16,7 @@ void RepresentationPhase::representNumeralAlignment(){
     std::string alignment_file_name = std::to_string(calculations_->getSubstructureLength());
     alignment_file_name.append("_"+p_protein_.getName()+"_"+q_protein_.getName()+"_numeral_alignment_file.txt");
     TXTFile alignment_file(alignment_file_name);
-    alignment_file.writeData("./alignment_results_numeral/", calculations_->getAlignment().first, calculations_->getAlignment().second);
+    alignment_file.writeDataVertically("./alignment_results_numeral/", calculations_->getAlignment().first, calculations_->getAlignment().second);
 }
 
 void RepresentationPhase::representIdentityScore(){
