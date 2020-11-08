@@ -11,6 +11,9 @@ std::string CIFParser::getFilePath() const{
 }
 
 void CIFParser::parseAtomSiteColumns(){
+    if (input_.is_open()){
+        input_.close();
+    }
     input_.open(file_path_);
     while(!input_.eof()){
         input_ >> reading_;
@@ -25,9 +28,12 @@ void CIFParser::parseAtomSiteColumns(){
             break;
         }
     }
+   // input_.close();
 }
 
 std::vector<Atom> CIFParser::parseAtoms(){
+    //std::ifstream input_;
+    //input_.open(file_path_);
     std::vector<Atom> all_atoms;
     std::vector<std::string> atom_row(atom_site_columns_.size());
     

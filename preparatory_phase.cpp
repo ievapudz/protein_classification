@@ -4,10 +4,10 @@ PreparatoryPhase::PreparatoryPhase(std::string protein_chains_list_file_name):
     constants_("./mmCIF_files/", -4, 4, 4.0, 1.0, 1, 7),
     aminoacid_codes_file_("aminoacid_codes.txt"),
     protein_chains_list_(protein_chains_list_file_name){
-    
+
         aminoacid_codes_ = aminoacid_codes_file_.parsePairedData();
         protein_chains_ = protein_chains_list_.parseData();
-        
+
         for(int i = 0; i < protein_chains_.size(); i++){
             auth_asym_ids_.push_back(std::string(1, protein_chains_[i][5]));
             transform(protein_chains_[i].begin(), protein_chains_[i].end(), protein_chains_[i].begin(), ::tolower);
@@ -45,7 +45,7 @@ void PreparatoryPhase::setProtein(char protein, int index){
 void PreparatoryPhase::setDistanceFile(std::string distance_file_name, int substructure_length){
     distance_file_name.append(std::to_string(substructure_length));
     distance_file_name.append("_length_distances.csv");
-    
+
     distance_file_.setFileName(distance_file_name);
     distance_file_.parseOneDataSet(1);
 }
@@ -54,5 +54,3 @@ void PreparatoryPhase::run(int index_p, int index_q){
     this->setProtein('P', index_p);
     this->setProtein('Q', index_q);
 }
-
-

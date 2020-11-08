@@ -24,7 +24,7 @@ class PreparatoryPhase{
         Protein p_protein_;
         Protein q_protein_;
         CSVFile distance_file_;
-        
+
         PreparatoryPhase(std::string protein_chains_list_file_name);
         void setProtein(char protein, int index);
         void setDistanceFile(std::string distance_file_name, int substructure_length);
