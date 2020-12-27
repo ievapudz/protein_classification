@@ -20,6 +20,7 @@ class CalculationPhase{
         double mean_;
         double standard_deviation_;
     
+        std::vector< std::string > alignment_2_;
         std::pair< std::vector<std::string>, std::vector<std::string> > alignment_;
         std::pair<double, double> identity_;
         
@@ -33,8 +34,11 @@ class CalculationPhase{
         std::pair< std::vector<std::string>, std::vector<std::string> >& getAlignment();
         std::pair<double, double> getIdentity();
     
+        std::vector<std::string>& getAlignment2();
+    
         DistanceMatrix calculateDistanceScoreMatrix();
-        DirectionMatrix algorithmNeedlemanWunsch(DistanceMatrix& matrix);
+        
+        std::vector<std::string> algorithmNeedlemanWunsch(DistanceMatrix& match);
         void align(DirectionMatrix& direction_matrix, DistanceMatrix* distance_matrix);
         void alignNumerally(DirectionMatrix& direction_matrix, DistanceMatrix* distance_matrix);
         void run();
