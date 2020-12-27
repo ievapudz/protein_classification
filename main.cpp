@@ -18,6 +18,7 @@ int main(int argc, const char * argv[]){
         PreparatoryPhase prep_phase(argv[1]);
         prep_phase.run(0, 1);
         for(int i = prep_phase.constants_.minSubstructureLength(); i <= prep_phase.constants_.maxSubstructureLength(); i++){
+            std::cout << i << " running " << std::endl;
             CalculationPhase calc_phase(&prep_phase, i);
             calc_phase.run();
             RepresentationPhase repr_phase(&calc_phase);
