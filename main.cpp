@@ -22,7 +22,7 @@ int main(int argc, const char * argv[]){
                 calc_phase.run();
                 RepresentationPhase repr_phase(&calc_phase);
                 repr_phase.representNumeralAlignment();
-                repr_phase.representIdentityScore();
+                //repr_phase.representIdentityScore();
             }
         }
     }catch(const std::length_error& le){
