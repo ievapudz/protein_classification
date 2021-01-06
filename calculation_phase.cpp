@@ -89,26 +89,45 @@ std::vector<std::string> CalculationPhase::algorithmNeedlemanWunsch(DistanceMatr
 
         int i = seq1.size();
         int j = seq2.size();
+        
+        double identity_score = 0.0;
+        bool is_gap = false;
 
         while(i>0 && j>0){
             int dir = directions_matrix[i][j];
             if(dir == 0){
                 i--;
                 j--;
+                is_gap = false;
+                identity_score += match.getScore(std::make_pair(seq1[i], seq2[j]));
                 std::pair<int, int> pair = std::make_pair(i, j);
                 alignment.push_back(pair);
             }else if(dir == 1){
                 i--;
+                if(is_gap){
+                  identity_score -= preparatory_->constants_.gapExtPenalty();
+                }else{
+                  is_gap = true;
+                  identity_score -= preparatory_->constants_.gapOpenPenalty();
+                }
                 std::pair<int, int> pair = std::make_pair(i, -1);
                 alignment.push_back(pair);
             }else{
                 j--;
+                if(is_gap){
+                  identity_score -= preparatory_->constants_.gapExtPenalty();
+                }else{
+                  is_gap = true;
+                  identity_score -= preparatory_->constants_.gapOpenPenalty();
+                }
                 std::pair<int, int> pair = std::make_pair(-1, j);
                 alignment.push_back(pair);
             }
         }
-
-        alignment.pop_back();
+        
+        identity_ = std::make_pair(identity_score / seq1.size(), identity_score / seq2.size());
+        std::cout << identity_.first << " " << identity_.second << std::endl;
+        //alignment.pop_back();
         std::reverse(alignment.begin(), alignment.end());
 
         for(int k = 0; k < alignment.size(); k++){

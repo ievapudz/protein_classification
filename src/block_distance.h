@@ -10,7 +10,7 @@
 #include "biological_structures.h"
 
 class BlockDistanceCalculator{
-        int substructure_length_;
+    int substructure_length_;
     
         Protein protein_1_;
         Protein protein_2_;

@@ -104,7 +104,6 @@ std::vector<int> BlockDistanceCalculator::getNumberedSubunitChain(int chain_choi
     int first_aminoacid_seq_id = 1;
     switch(chain_choice){
         case 1:{
-            //first_aminoacid_seq_id = Integer.parseInt(protein_1_.getAtoms("CA").get(0).getAuthSeqID());
             std::string buffer = protein_1_.getAtoms("CA")[0].getAuthSeqID();
             std::stringstream stream(buffer);
         
@@ -112,8 +111,7 @@ std::vector<int> BlockDistanceCalculator::getNumberedSubunitChain(int chain_choi
             break;
         }
         case 2:{
-            //first_aminoacid_seq_id = Integer.parseInt(protein_2_.getAtoms("CA").get(0).getAuthSeqID());
-            std::string buffer = protein_1_.getAtoms("CA")[0].getAuthSeqID();
+            std::string buffer = protein_2_.getAtoms("CA")[0].getAuthSeqID();
             std::stringstream stream(buffer);
             stream >> first_aminoacid_seq_id;
             break;
