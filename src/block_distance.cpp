@@ -101,13 +101,35 @@ std::vector<int> BlockDistanceCalculator::getNumberedSubunitChain(int chain_choi
     
     std::vector<int> numbered_subunit_chain;
     
+    int first_aminoacid_seq_id = 1;
+    switch(chain_choice){
+        case 1:{
+            //first_aminoacid_seq_id = Integer.parseInt(protein_1_.getAtoms("CA").get(0).getAuthSeqID());
+            std::string buffer = protein_1_.getAtoms("CA")[0].getAuthSeqID();
+            std::stringstream stream(buffer);
+        
+            stream >> first_aminoacid_seq_id;
+            break;
+        }
+        case 2:{
+            //first_aminoacid_seq_id = Integer.parseInt(protein_2_.getAtoms("CA").get(0).getAuthSeqID());
+            std::string buffer = protein_1_.getAtoms("CA")[0].getAuthSeqID();
+            std::stringstream stream(buffer);
+            stream >> first_aminoacid_seq_id;
+            break;
+        }
+        default:{
+            break;
+        }
+    }
+    
     if(chain_choice == 1){
-        for(int i = this->getNeighbourNumberLeft(); i < (subunit_chain_1_.size() - this->getNeighbourNumberRight()); i++){
+        for(int i = this->getNeighbourNumberLeft() + first_aminoacid_seq_id - 1; i < (subunit_chain_1_.size() - this->getNeighbourNumberRight() + first_aminoacid_seq_id); i++){
             numbered_subunit_chain.push_back(i+1);
         }
     }
     else if(chain_choice == 2){
-        for(int i = this->getNeighbourNumberLeft(); i < (subunit_chain_2_.size() - this->getNeighbourNumberRight()); i++){
+        for(int i = this->getNeighbourNumberLeft() + first_aminoacid_seq_id - 1; i < (subunit_chain_2_.size() - this->getNeighbourNumberRight() + first_aminoacid_seq_id); i++){
             numbered_subunit_chain.push_back(i+1);
         }
     }

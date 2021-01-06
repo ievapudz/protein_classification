@@ -1,6 +1,7 @@
 #ifndef _BLOCK_DISTANCE_
 #define _BLOCK_DISTANCE_
 #include <iostream>
+#include <sstream> 
 #include <utility>
 #include <vector>
 #include <stdexcept>
