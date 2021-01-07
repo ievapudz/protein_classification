@@ -9,9 +9,10 @@ PreparatoryPhase::PreparatoryPhase(std::string protein_chains_list_file_name):
         protein_chains_ = protein_chains_list_.parseData();
 
         for(int i = 0; i < protein_chains_.size(); i++){
-            auth_asym_ids_.push_back(std::string(1, protein_chains_[i][5]));
+            auth_asym_ids_.push_back(std::string(1, protein_chains_[i][protein_chains_[i].size()-1]));
+            //auth_asym_ids_.push_back(std::string(1, protein_chains_[i][5]));
             transform(protein_chains_[i].begin(), protein_chains_[i].end(), protein_chains_[i].begin(), ::tolower);
-            protein_chains_[i] = protein_chains_[i].substr(0, 4);
+            protein_chains_[i] = protein_chains_[i].substr(0, protein_chains_[i].size() - 2);
             std::string path = constants_.cifFilePath();
             path.append(protein_chains_[i]+".cif");
             protein_chains_[i] = path;

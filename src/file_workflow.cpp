@@ -29,9 +29,12 @@ mmCIFFile::mmCIFFile(std::string file_name) : File(file_name){
 
 std::string mmCIFFile::getProteinName(){
     std::string protein_name = this->getFileName();
-    protein_name.erase(0, this->getFileName().size() - 8);
-    protein_name.erase(4, 4);
-    return protein_name;
+    std::size_t found = protein_name.find_last_of("/\\");
+    std::string buffer = protein_name.substr(found+1);
+    buffer = buffer.erase(4, buffer.size());
+    //protein_name.erase(0, this->getFileName().size() - 8);
+    //protein_name.erase(4, 4);
+    return buffer;
 }
 
 //---class CSVFile
