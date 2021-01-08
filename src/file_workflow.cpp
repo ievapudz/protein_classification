@@ -31,9 +31,10 @@ std::string mmCIFFile::getProteinName(){
     std::string protein_name = this->getFileName();
     std::size_t found = protein_name.find_last_of("/\\");
     std::string buffer = protein_name.substr(found+1);
-    buffer = buffer.erase(4, buffer.size());
+    buffer = buffer.erase(buffer.size()-4, buffer.size());
     //protein_name.erase(0, this->getFileName().size() - 8);
     //protein_name.erase(4, 4);
+    std::cout << buffer << std::endl;
     return buffer;
 }
 
