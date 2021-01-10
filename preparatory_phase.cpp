@@ -52,6 +52,8 @@ void PreparatoryPhase::setDistanceFile(std::string distance_file_name, int subst
 }
 
 void PreparatoryPhase::run(int index_p, int index_q){
+    p_protein_.reset();
+    q_protein_.reset();
     this->setProtein('P', index_p);
     this->setProtein('Q', index_q);
 }

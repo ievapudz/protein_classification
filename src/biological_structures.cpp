@@ -482,3 +482,25 @@ std::vector<double> Protein::getAngleDistances(unsigned int substructure_length,
     return angle_distances;
 }
 
+void Protein::reset(){
+    name_ = "";
+    while (!all_atoms_.empty()){
+        all_atoms_.pop_back();
+    }
+    while (!n_atoms_.empty()){
+        n_atoms_.pop_back();
+    }
+    while (!ca_atoms_.empty()){
+        ca_atoms_.pop_back();
+    }
+    while (!c_atoms_.empty()){
+        c_atoms_.pop_back();
+    }
+    while (!sequence_.empty()){
+        sequence_.pop_back();
+    }
+    while (!subunit_chain_.empty()){
+        subunit_chain_.pop_back();
+    }
+}
+

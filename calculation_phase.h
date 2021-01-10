@@ -27,8 +27,7 @@ class CalculationPhase{
     public:
         CalculationPhase(PreparatoryPhase* preparatory, int substructure_length);
         void setMean();
-    void setStandardDeviation();
-    
+        void setStandardDeviation();
         PreparatoryPhase* getPreparatory();
         int getSubstructureLength();
         std::pair< std::vector<std::string>, std::vector<std::string> >& getAlignment();
@@ -39,8 +38,6 @@ class CalculationPhase{
         DistanceMatrix calculateDistanceScoreMatrix();
         
         std::vector<std::string> algorithmNeedlemanWunsch(DistanceMatrix& match);
-        void align(DirectionMatrix& direction_matrix, DistanceMatrix* distance_matrix);
-        void alignNumerally(DirectionMatrix& direction_matrix, DistanceMatrix* distance_matrix);
         void run();
 };
 

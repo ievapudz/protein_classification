@@ -90,6 +90,8 @@ class Protein{
         std::vector<double> getPsiAngles();
     
         std::vector<double> getAngleDistances(unsigned int substructure_length, char choice);
+    
+        void reset();
 };
 
 #endif

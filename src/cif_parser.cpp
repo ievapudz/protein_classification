@@ -28,12 +28,9 @@ void CIFParser::parseAtomSiteColumns(){
             break;
         }
     }
-   // input_.close();
 }
 
 std::vector<Atom> CIFParser::parseAtoms(){
-    //std::ifstream input_;
-    //input_.open(file_path_);
     std::vector<Atom> all_atoms;
     std::vector<std::string> atom_row(atom_site_columns_.size());
     
@@ -94,6 +91,9 @@ std::vector<Atom> CIFParser::parseAtoms(){
             all_atoms.push_back(atom);
     }while(reading_ != "#");
     
+    while(!atom_site_columns_.empty()){
+        atom_site_columns_.pop_back();
+    }
     return all_atoms;
 }
 
