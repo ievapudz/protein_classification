@@ -15,14 +15,16 @@ int main(int argc, const char * argv[]){
 
     try{
         PreparatoryPhase prep_phase(argv[1]);
-        for(int j = 0; j < prep_phase.protein_chains_.size() - 1; j++){
-            prep_phase.run(j, j+1);
-            for(int i = prep_phase.constants_.minSubstructureLength(); i <= prep_phase.constants_.maxSubstructureLength(); i++){
-                CalculationPhase calc_phase(&prep_phase, i);
-                calc_phase.run();
-                RepresentationPhase repr_phase(&calc_phase);
-                repr_phase.representNumeralAlignment();
-                //repr_phase.representIdentityScore();
+        for(int j = 0; j < prep_phase.protein_chains_.size(); j++){
+            for(int k = 0; k < prep_phase.protein_chains_.size(); k++){
+                prep_phase.run(j, k);
+                for(int i = prep_phase.constants_.minSubstructureLength(); i <= prep_phase.constants_.maxSubstructureLength(); i++){
+                    CalculationPhase calc_phase(&prep_phase, i);
+                    calc_phase.run();
+                    RepresentationPhase repr_phase(&calc_phase);
+                    repr_phase.representNumeralAlignment();
+                    //repr_phase.representIdentityScore();
+                }
             }
         }
     }catch(const std::length_error& le){
