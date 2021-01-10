@@ -27,7 +27,7 @@ class CalculationPhase{
     public:
         CalculationPhase(PreparatoryPhase* preparatory, int substructure_length);
         void setMean();
-        void setStandardDeviation();
+    void setStandardDeviation();
     
         PreparatoryPhase* getPreparatory();
         int getSubstructureLength();
