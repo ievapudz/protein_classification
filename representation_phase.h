@@ -12,7 +12,7 @@ class RepresentationPhase{
         RepresentationPhase(CalculationPhase* calculations);
         void representAlignment();
         void representNumeralAlignment();
-        void representIdentityScore();
+        std::pair<double, double> representIdentityScore();
 };
 
 

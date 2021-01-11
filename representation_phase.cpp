@@ -21,12 +21,7 @@ void RepresentationPhase::representNumeralAlignment(){
     alignment_file.writeData("./alignment_results_numeral/");
 }
 
-void RepresentationPhase::representIdentityScore(){
-    std::vector<std::string> identity_figure;
-    identity_figure.push_back(std::to_string(calculations_->getIdentity().first));
-    identity_figure.push_back(std::to_string(calculations_->getIdentity().second));
-    std::string identity_score_file_name = std::to_string(calculations_->getSubstructureLength());
-    identity_score_file_name.append("_"+p_protein_.getName()+"_"+q_protein_.getName()+"_identity_score.txt");
-    TXTFile identity_score_file(identity_score_file_name, identity_figure);
-    identity_score_file.writeData("./alignment_results_traditional/");
+std::pair<double, double> RepresentationPhase::representIdentityScore(){
+    std::cout << calculations_->getIdentity().first << " " << calculations_->getIdentity().second << std::endl;
+    return calculations_->getIdentity();
 }

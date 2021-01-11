@@ -126,7 +126,7 @@ std::vector<std::string> CalculationPhase::algorithmNeedlemanWunsch(DistanceMatr
         }
         
         identity_ = std::make_pair(identity_score / seq1.size(), identity_score / seq2.size());
-        std::cout << identity_.first << " " << identity_.second << std::endl;
+        
         alignment.pop_back();
         std::reverse(alignment.begin(), alignment.end());
 
