@@ -7,6 +7,7 @@
 #include "./src/file_workflow.h"
 #include "./src/block_distance.h"
 #include "./src/constants.hpp"
+#include "./src/identity_score_table.h"
 #include "preparatory_phase.h"
 #include "calculation_phase.h"
 #include "representation_phase.h"
@@ -17,15 +18,11 @@ int main(int argc, const char * argv[]){
         PreparatoryPhase prep_phase(argv[1]);
         std::vector<std::string> protein_chains;
         
-        double identity_scores[prep_phase.protein_chains_.size()][prep_phase.protein_chains_.size()];
-        for(int i = 0; i < prep_phase.protein_chains_.size(); i++){
-            for(int j = 0; j < prep_phase.protein_chains_.size(); j++){
-                identity_scores[i][j] = 0.0;
-            }
-        }
+        IdentityScoreTable table(prep_phase.protein_chains_.size());
         
+        // --- protein alignment ---
         for(int j = 0; j < prep_phase.protein_chains_.size(); j++){
-            protein_chains.push_back(prep_phase.protein_chains_[j]);
+            protein_chains.push_back(prep_phase.getProteinChain(j));
             for(int k = 0; k < prep_phase.protein_chains_.size(); k++){
                 prep_phase.run(j, k);
                 for(int i = prep_phase.constants_.minSubstructureLength(); i <= prep_phase.constants_.maxSubstructureLength(); i++){
@@ -36,23 +33,17 @@ int main(int argc, const char * argv[]){
                     
                     std::string str = std::to_string(i);
                     if(str == argv[2]){
-                        identity_scores[j][k] = repr_phase.representIdentityScore().first;
+                        table.setAt(j, k, repr_phase.representIdentityScore().first);
                     }
                 }
             }
         }
         
-        std::cout << "\nAligned proteins: " << std::endl;
-        for(int i = 0; i < protein_chains.size(); i++){
-            std::cout << protein_chains[i] << std::endl;
-        }
+        table.setProteins(protein_chains);
+        // --- printing results ---
+        table.printProteins();
+        table.printTable();
         
-        for(int i = 0; i < prep_phase.protein_chains_.size(); i++){
-            for(int j = 0; j < prep_phase.protein_chains_.size(); j++){
-                std::cout << identity_scores[i][j] << " ";
-            }
-            std::cout << std::endl;
-        }
     }catch(const std::length_error& le){
         std::cerr << le.what() << std::endl;
     }

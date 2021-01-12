@@ -22,6 +22,5 @@ void RepresentationPhase::representNumeralAlignment(){
 }
 
 std::pair<double, double> RepresentationPhase::representIdentityScore(){
-    std::cout << calculations_->getIdentity().first << " " << calculations_->getIdentity().second << std::endl;
     return calculations_->getIdentity();
 }

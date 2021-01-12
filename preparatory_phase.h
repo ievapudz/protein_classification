@@ -28,6 +28,7 @@ class PreparatoryPhase{
         PreparatoryPhase(std::string protein_chains_list_file_name);
         void setProtein(char protein, int index);
         void setDistanceFile(std::string distance_file_name, int substructure_length);
+        std::string getProteinChain(int protein_chains_list_index);
         void run(int index_p, int index_q);
 };
 

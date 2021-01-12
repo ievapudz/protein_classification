@@ -51,6 +51,16 @@ void PreparatoryPhase::setDistanceFile(std::string distance_file_name, int subst
     distance_file_.parseOneDataSet(1);
 }
 
+std::string PreparatoryPhase::getProteinChain(int protein_chains_list_index){
+    std::string protein_name = protein_chains_[protein_chains_list_index];
+    std::size_t found = protein_name.find_last_of("/\\");
+    std::string buffer = protein_name.substr(found+1);
+    buffer = buffer.erase(buffer.size()-4, buffer.size());
+    buffer.append("_" + auth_asym_ids_[protein_chains_list_index]);
+    protein_name = buffer;
+    return protein_name;
+}
+
 void PreparatoryPhase::run(int index_p, int index_q){
     p_protein_.reset();
     q_protein_.reset();

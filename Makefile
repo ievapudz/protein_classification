@@ -3,8 +3,8 @@ CXXFLAGS = -O3
 
 all: structural_alignment 
 
-structural_alignment: main.o representation_phase.o calculation_phase.o preparatory_phase.o constants.o cif_parser.o file_workflow.o geometry.o biological_structures.o block_distance.o distance_matrix.o distance_score_matrix.o scoring_matrix.o penalty_decision_matrix.o direction_matrix.o traceback.o sequence_aligner.o statistic_calculator.o
-	${CXX} main.o representation_phase.o calculation_phase.o preparatory_phase.o cif_parser.o file_workflow.o geometry.o biological_structures.o block_distance.o distance_matrix.o distance_score_matrix.o scoring_matrix.o penalty_decision_matrix.o direction_matrix.o sequence_aligner.o traceback.o statistic_calculator.o -o structural_alignment
+structural_alignment: main.o representation_phase.o calculation_phase.o preparatory_phase.o identity_score_table.o constants.o cif_parser.o file_workflow.o geometry.o biological_structures.o block_distance.o distance_matrix.o distance_score_matrix.o scoring_matrix.o penalty_decision_matrix.o direction_matrix.o traceback.o sequence_aligner.o statistic_calculator.o
+	${CXX} main.o representation_phase.o calculation_phase.o preparatory_phase.o identity_score_table.o cif_parser.o file_workflow.o geometry.o biological_structures.o block_distance.o distance_matrix.o distance_score_matrix.o scoring_matrix.o penalty_decision_matrix.o direction_matrix.o sequence_aligner.o traceback.o statistic_calculator.o -o structural_alignment
 
 main.o: main.cpp ./src/biological_structures.h preparatory_phase.h calculation_phase.h
 	${CXX} ${CXXFLAGS} main.cpp ./src/biological_structures.cpp preparatory_phase.cpp calculation_phase.cpp -c
@@ -17,6 +17,9 @@ calculation_phase.o: calculation_phase.h preparatory_phase.h ./src/block_distanc
 
 preparatory_phase.o: preparatory_phase.h ./src/file_workflow.h ./src/cif_parser.h
 	${CXX} ${CXXFLAGS} preparatory_phase.cpp ./src/constants.hpp ./src/file_workflow.cpp ./src/cif_parser.cpp ./src/biological_structures.cpp -c
+
+identity_score_table.o: ./src/identity_score_table.cpp ./src/identity_score_table.h
+	${CXX} ${CXXFLAGS} ./src/identity_score_table.cpp -c
 
 statistic_calculator.o: ./src/statistic_calculator.cpp ./src/statistic_calculator.h
 	${CXX} ${CXXFLAGS} ./src/statistic_calculator.cpp -c
