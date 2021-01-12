@@ -19,20 +19,22 @@ int main(int argc, const char * argv[]){
         
         std::vector<std::string> protein_chains;
         
-        std::vector< IdentityScoreTable > tables(7, IdentityScoreTable(prep_phase.protein_chains_.size()));
+        std::vector< IdentityScoreTable > tables(prep_phase.constants_.maxSubstructureLength() - prep_phase.constants_.minSubstructureLength() + 1, IdentityScoreTable(prep_phase.protein_chains_.size()));
         
         for(int j = 0; j < prep_phase.protein_chains_.size(); j++){
             protein_chains.push_back(prep_phase.getProteinChain(j));
             for(int k = 0; k < prep_phase.protein_chains_.size(); k++){
                 prep_phase.run(j, k);
+                int tables_index = 0;
                 for(int i = prep_phase.constants_.minSubstructureLength(); i <= prep_phase.constants_.maxSubstructureLength(); i++){
                     CalculationPhase calc_phase(&prep_phase, i);
                     calc_phase.run();
                     RepresentationPhase repr_phase(&calc_phase);
                     repr_phase.representNumeralAlignment();
                     
-                    tables[i-1].setSubstructureLength(i);
-                    tables[i-1].setAt(j, k, repr_phase.representIdentityScore().first);
+                    tables[tables_index].setSubstructureLength(i);
+                    tables[tables_index].setAt(j, k, repr_phase.representIdentityScore().first);
+                    tables_index++;
                 }
             }
         }
