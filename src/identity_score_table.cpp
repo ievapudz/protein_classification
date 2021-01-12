@@ -33,6 +33,56 @@ std::vector< std::vector<double> > IdentityScoreTable::getTable() const{
     return table_;
 }
 
+double IdentityScoreTable::getMaxScoreInRow(int index_row){
+    double max_score = table_[index_row][0];
+    std::string label = SCOP_class_labels[0];
+    for(int i = 0; i < table_.size() - 1; i++){
+        if(table_[index_row][i] > max_score){
+            max_score = table_[index_row][i];
+            label = SCOP_class_labels[i];
+        }
+    }
+    std::cout << label << std::endl;
+    return max_score;
+}
+
+double IdentityScoreTable::getMaxScoreInColumn(int index_column){
+    double max_score = table_[0][index_column];
+    std::string label = SCOP_class_labels[0];
+    for(int i = 0; i < table_.size() - 1; i++){
+        if(table_[i][index_column] > max_score){
+            max_score = table_[i][index_column];
+            label = SCOP_class_labels[i];
+        }
+    }
+    std::cout << label << std::endl;
+    return max_score;
+}
+
+std::string IdentityScoreTable::getLabelByRow(int index_row){
+    double max_score = table_[index_row][0];
+    std::string label = SCOP_class_labels[0];
+    for(int i = 0; i < table_.size() - 1; i++){
+        if(table_[index_row][i] > max_score){
+            max_score = table_[index_row][i];
+            label = SCOP_class_labels[i];
+        }
+    }
+    return label;
+}
+
+std::string IdentityScoreTable::getLabelByColumn(int index_column){
+    double max_score = table_[0][index_column];
+    std::string label = SCOP_class_labels[0];
+    for(int i = 0; i < table_.size() - 1; i++){
+        if(table_[i][index_column] > max_score){
+            max_score = table_[i][index_column];
+            label = SCOP_class_labels[i];
+        }
+    }
+    return label;
+}
+
 void IdentityScoreTable::printProteins() const{
     for(int i = 0; i < proteins_.size(); i++){
         std::cout << proteins_[i] << std::endl;
