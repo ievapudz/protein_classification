@@ -20,7 +20,6 @@ int main(int argc, const char * argv[]){
         
         IdentityScoreTable table(prep_phase.protein_chains_.size());
         
-        // --- protein alignment ---
         for(int j = 0; j < prep_phase.protein_chains_.size(); j++){
             protein_chains.push_back(prep_phase.getProteinChain(j));
             for(int k = 0; k < prep_phase.protein_chains_.size(); k++){
@@ -33,16 +32,15 @@ int main(int argc, const char * argv[]){
                     
                     std::string str = std::to_string(i);
                     if(str == argv[2]){
+                        table.setSubstructureLength(i);
                         table.setAt(j, k, repr_phase.representIdentityScore().first);
                     }
                 }
             }
         }
-        
         table.setProteins(protein_chains);
-        // --- printing results ---
         table.printProteins();
-        table.printTable();
+        table.printTableToFile("identity_scores_" + std::to_string(table.getSubstructureLength()) + ".txt");
         
     }catch(const std::length_error& le){
         std::cerr << le.what() << std::endl;

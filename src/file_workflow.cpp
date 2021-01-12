@@ -249,6 +249,24 @@ void TXTFile::writeData(std::string output_location){
     }
 }
 
+void TXTFile::writeData(std::string output_location, std::vector< std::string > labels, std::vector< std::vector<double> > data){
+
+    output_location.append(this->getFileName());
+    std::ofstream output;
+    output.open(output_location);
+    
+    for(int i = 0; i < labels.size(); i++){
+        output << labels[i] << "\n";
+    }
+
+    for(int i = 0; i < data.size(); i++){
+        for(int j = 0; j < data[0].size(); j++){
+            output << data[i][j] << " ";
+        }
+        output << "\n";
+    }
+}
+
 void TXTFile::writeData(std::string output_location, std::vector<std::string> data_1, std::vector<std::string> data_2){
 
     output_location.append(this->getFileName());

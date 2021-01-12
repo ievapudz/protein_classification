@@ -5,6 +5,10 @@ IdentityScoreTable::IdentityScoreTable(int number_of_proteins):
     
 }
 
+void IdentityScoreTable::setSubstructureLength(int substructure_length){
+    substructure_length_ = substructure_length;
+}
+
 void IdentityScoreTable::setProteins(std::vector< std::string > proteins){
     proteins_ = proteins;
 }
@@ -15,6 +19,14 @@ void IdentityScoreTable::setTable(std::vector< std::vector<double> > table){
 
 void IdentityScoreTable::setAt(int index_row, int index_column, double element){
     table_[index_row][index_column] = element;
+}
+
+int IdentityScoreTable::getSubstructureLength() const{
+    return substructure_length_;
+}
+
+std::vector< std::string > IdentityScoreTable::getProteins() const{
+    return proteins_;
 }
 
 std::vector< std::vector<double> > IdentityScoreTable::getTable() const{
@@ -34,4 +46,9 @@ void IdentityScoreTable::printTable() const{
         }
         std::cout << std::endl;
     }
+}
+
+void IdentityScoreTable::printTableToFile(std::string file_name) const{
+    TXTFile identity_score_table_file(file_name);
+    identity_score_table_file.writeData("./identity_scores/", proteins_, table_);
 }
