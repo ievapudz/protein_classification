@@ -16,9 +16,10 @@ int main(int argc, const char * argv[]){
 
     try{
         PreparatoryPhase prep_phase(argv[1]);
+        
         std::vector<std::string> protein_chains;
         
-        IdentityScoreTable table(prep_phase.protein_chains_.size());
+        std::vector< IdentityScoreTable > tables(7, IdentityScoreTable(prep_phase.protein_chains_.size()));
         
         for(int j = 0; j < prep_phase.protein_chains_.size(); j++){
             protein_chains.push_back(prep_phase.getProteinChain(j));
@@ -30,17 +31,16 @@ int main(int argc, const char * argv[]){
                     RepresentationPhase repr_phase(&calc_phase);
                     repr_phase.representNumeralAlignment();
                     
-                    std::string str = std::to_string(i);
-                    if(str == argv[2]){
-                        table.setSubstructureLength(i);
-                        table.setAt(j, k, repr_phase.representIdentityScore().first);
-                    }
+                    tables[i-1].setSubstructureLength(i);
+                    tables[i-1].setAt(j, k, repr_phase.representIdentityScore().first);
                 }
             }
         }
-        table.setProteins(protein_chains);
-        table.printProteins();
-        table.printTableToFile("identity_scores_" + std::to_string(table.getSubstructureLength()) + ".txt");
+        std::string protein_chains_list_name(argv[1]);
+        for(IdentityScoreTable table : tables){
+            table.setProteins(protein_chains);
+            table.printTableToFile("identity_scores_" + protein_chains_list_name.substr(0, protein_chains_list_name.size() - 4) + "_" + std::to_string(table.getSubstructureLength()) + ".txt");
+        }
         
     }catch(const std::length_error& le){
         std::cerr << le.what() << std::endl;
