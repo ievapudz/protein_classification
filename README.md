@@ -8,14 +8,6 @@ By default during each alignment process there are seven iterations made due to 
 
 ## Requirements for protein chains file
 
-### For pairwise global protein chain alignment
-
-List down all proteins and their chains of interest (chain can be labelled with a symbol of underscore: "_") to align with each other.  
-` 1DLW_A `  
-` 1UX8_A `
-
-### For classification
-
 List down representatives of each SCOP class and add protein chain of interest at the end of the list:  
 ` all alpha `   
 ` all beta `    
@@ -23,6 +15,9 @@ List down representatives of each SCOP class and add protein chain of interest a
 ` alpha + beta `    
 ` small protein `    
 ` POI `  
+` `
+
+Note: leave an empty line after all proteins in the list.
 
 ## Results
 
