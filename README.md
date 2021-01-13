@@ -11,17 +11,17 @@ By default during each alignment process there are seven iterations made due to 
 ### For pairwise global protein chain alignment
 
 List down all proteins and their chains of interest (chain can be labelled with a symbol of underscore: "_" ) to align with each other.
-` 1DLW_A \n
+` 1DLW_A  
   1UX8_A `
 
 ### For classification
 
 List down representatives of each SCOP class and add protein chain of interest at the end of the list:
-` all alpha \n 
- all beta \n
- alph / beta \n
- alpha + beta \n
- small protein \n
+` all alpha  
+ all beta  
+ alph / beta  
+ alpha + beta  
+ small protein  
  POI `
 
 ## Results
