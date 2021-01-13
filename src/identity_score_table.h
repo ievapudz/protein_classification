@@ -26,6 +26,8 @@ class IdentityScoreTable{
         std::string getLabelByRow(int index_row);
         std::string getLabelByColumn(int index_column);
     
+        void addLabels();
+    
         void printProteins() const;
         void printTable() const;
         void printTableToFile(std::string file_name) const;

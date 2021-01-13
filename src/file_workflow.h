@@ -49,7 +49,7 @@ class TXTFile : public File{
         std::vector< std::pair<std::string, std::string> > parsePairedData();
         void setData(std::vector<std::string> data);
         void writeData(std::string output_location);
-    void writeData(std::string output_location, std::vector< std::string > labels, std::vector< std::vector<double> > data);
+        void writeData(std::string output_location, std::vector< std::string > labels, std::vector< std::vector<double> > data);
         void writeData(std::string output_location, std::vector<std::string> data_1, std::vector<std::string> data_2);
         void writeDataVertically(std::string output_location, std::vector<std::string> data_1, std::vector<std::string> data_2);
 };

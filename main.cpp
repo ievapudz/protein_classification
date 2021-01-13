@@ -41,6 +41,7 @@ int main(int argc, const char * argv[]){
         std::string protein_chains_list_name(argv[1]);
         for(IdentityScoreTable table : tables){
             table.setProteins(protein_chains);
+            table.addLabels();
             table.printTableToFile("identity_scores_" + protein_chains_list_name.substr(0, protein_chains_list_name.size() - 4) + "_" + std::to_string(table.getSubstructureLength()) + ".txt");
             std::cout << table.getSubstructureLength() << " " << table.getLabelByRow(5) << " " << table.getLabelByColumn(5) << std::endl;
         }

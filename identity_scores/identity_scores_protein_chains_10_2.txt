@@ -1,8 +1,8 @@
-5vbl_B
-1f56_A
-4djd_E
-2z7e_C
-2vrw_B
+5vbl_B all_alpha
+1f56_A all_beta
+4djd_E alpha/beta
+2z7e_C alpha+beta
+2vrw_B small_protein
 1a19_A
 1.81704 -1.61086 -5.76813 -1.70219 0.0208359 -1.31707 
 -1.375 1.8993 -2.28888 -0.282008 -2.08255 -0.0568426 

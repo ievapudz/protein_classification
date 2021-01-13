@@ -98,6 +98,15 @@ void IdentityScoreTable::printTable() const{
     }
 }
 
+void IdentityScoreTable::addLabels(){
+    for(int i = 0; i < proteins_.size(); i++){
+        if(i >= 5){
+            break;
+        }
+        proteins_[i].append(" " + SCOP_class_labels[i]);
+    }
+}
+
 void IdentityScoreTable::printTableToFile(std::string file_name) const{
     TXTFile identity_score_table_file(file_name);
     identity_score_table_file.writeData("./identity_scores/", proteins_, table_);
