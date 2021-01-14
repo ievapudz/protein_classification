@@ -38,6 +38,7 @@ int main(int argc, const char * argv[]){
                 }
             }
         }
+        
         std::string protein_chains_list_name(argv[1]);
         for(IdentityScoreTable table : tables){
             table.setProteins(protein_chains);

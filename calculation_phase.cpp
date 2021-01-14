@@ -99,7 +99,8 @@ std::vector<std::string> CalculationPhase::algorithmNeedlemanWunsch(DistanceMatr
                 i--;
                 j--;
                 is_gap = false;
-                identity_score += match.getScore(std::make_pair(seq1[i], seq2[j]));
+                identity_score += match.getMaxValue();
+                //identity_score += match.getScore(std::make_pair(seq1[i], seq2[j]));
                 std::pair<int, int> pair = std::make_pair(i, j);
                 alignment.push_back(pair);
             }else if(dir == 1){

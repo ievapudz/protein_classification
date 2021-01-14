@@ -11,7 +11,7 @@
 
 class PreparatoryPhase{
     public:
-        Constants constants_;
+    Constants constants_;
         TXTFile aminoacid_codes_file_;
         std::vector<std::pair<std::string, std::string> > aminoacid_codes_;
         TXTFile protein_chains_list_;
