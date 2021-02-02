@@ -109,6 +109,16 @@ void CSVFile::setData(std::vector<double> data_set, int data_set_choice){
     }
 }
 
+void CSVFile::writeData(std::string output_location, std::vector<std::string> data_set) const{
+    std::ofstream output;
+    output_location.append(this->getFileName());
+    output.open(output_location);
+    
+    for(int i = 0; i < data_set.size(); i++){
+        output << data_set[i] << std::endl;
+    }
+}
+
 void CSVFile::writeData(std::string output_location, std::string data_label, int data_set_choice) const{
     std::ofstream output;
     output_location.append(this->getFileName());

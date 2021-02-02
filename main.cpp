@@ -1,4 +1,6 @@
+#include <fstream>
 #include <algorithm>
+#include <vector>
 #include "./src/scoring_matrix.h"
 #include "./src/distance_score_matrix.h"
 #include "./src/distance_matrix.h"
@@ -15,42 +17,121 @@
 int main(int argc, const char * argv[]){
 
     try{
-        PreparatoryPhase prep_phase(argv[1]);
+        std::ifstream input;
+        input.open(argv[1]);
+        std::string read;
+        std::vector<std::string> file_content;
+        std::vector<std::string> chains;
+        std::vector<std::string> auth_seq_ids;
+        std::vector<std::string> labels;
+        std::vector<std::string> samples;
         
-        std::vector<std::string> protein_chains;
+        while(!input.eof()){
+            input >> read;
+            file_content.push_back(read);
+        }
+        file_content.pop_back();
         
-        std::vector< IdentityScoreTable > tables(prep_phase.constants_.maxSubstructureLength() - prep_phase.constants_.minSubstructureLength() + 1, IdentityScoreTable(prep_phase.protein_chains_.size()));
+        for(int i = 0; i < file_content.size(); i++){
+            if(i % 2 == 0){
+                chains.push_back(file_content[i]);
+            }else{
+                labels.push_back(file_content[i]);
+            }
+        }
+        const int number_of_classes = 5;
         
-        for(int j = 0; j < prep_phase.protein_chains_.size(); j++){
-            protein_chains.push_back(prep_phase.getProteinChain(j));
-            for(int k = 0; k < prep_phase.protein_chains_.size(); k++){
-                prep_phase.run(j, k);
-                int tables_index = 0;
-                for(int i = prep_phase.constants_.minSubstructureLength(); i <= prep_phase.constants_.maxSubstructureLength(); i++){
-                    CalculationPhase calc_phase(&prep_phase, i);
-                    calc_phase.run();
-                    RepresentationPhase repr_phase(&calc_phase);
-                    repr_phase.representNumeralAlignment();
-                    
-                    tables[tables_index].setSubstructureLength(i);
-                    tables[tables_index].setAt(j, k, repr_phase.representIdentityScore().first);
-                    tables_index++;
+        int class_cluster_indeces [number_of_classes];
+        const std::string classes [number_of_classes] = { "all_alpha", "all_beta", "alpha_slash_beta", "alpha_plus_beta", "small_protein" };
+        bool class_index_found [number_of_classes];
+        for(int i = 0; i < number_of_classes; i++){
+            class_index_found[i] = false;
+        }
+        
+        for(int i = 0; i < labels.size(); i++){
+            for(int j = 0; j < number_of_classes; j++){
+                if((labels[i] == classes[j])&&(!class_index_found[j])){
+                    class_cluster_indeces[j] = i;
+                    class_index_found[j] = true;
                 }
             }
         }
         
-        std::string protein_chains_list_name(argv[1]);
-        for(IdentityScoreTable table : tables){
-            table.setProteins(protein_chains);
-            table.addLabels();
-            table.printTableToFile("identity_scores_" + protein_chains_list_name.substr(0, protein_chains_list_name.size() - 4) + "_" + std::to_string(table.getSubstructureLength()) + ".txt");
-            std::cout << table.getSubstructureLength() << " " << table.getLabelByRow(5) << " " << table.getLabelByColumn(5) << std::endl;
+        int number_of_used_indeces = 1000;
+        std::vector<int> used_indeces;
+        
+        for(int i = 0; i < number_of_classes; i++){
+            for(int j = 0; j < number_of_used_indeces; j++){
+                used_indeces.push_back(class_cluster_indeces[i] + j);
+            }
         }
+        
+        for(int i = 0; i < chains.size(); i++){
+            std::string chain = chains[i].substr(0, chains[i].length() - 2);
+            std::string auth_seq_id = chains[i].substr(chains[i].length() - 1, chains[i].length());
+            auth_seq_ids.push_back(auth_seq_id);
+            chains[i] = "./mmCIF_files/" + chain + ".cif";
+        }
+        
+        for(int j = 0; j < used_indeces.size(); j++){
+            std::cout << j << std::endl;
+            std::ifstream infile(chains[used_indeces[j]]);
+            if(infile.good()){
+                CIFParser parser;
+                //parser.setFilePath(chains[j]);
+                parser.setFilePath(chains[used_indeces[j]]);
+                Protein protein;
+                parser.parseAtomSiteColumns();
+                protein.setAllAtoms(parser.parseAtoms());
+                /*
+                protein.filterAtoms("N", auth_seq_ids[j]);
+                protein.filterAtoms("CA", auth_seq_ids[j]);
+                protein.filterAtoms("C", auth_seq_ids[j]);
+                 */
+                
+                protein.filterAtoms("N", auth_seq_ids[used_indeces[j]]);
+                protein.filterAtoms("CA", auth_seq_ids[used_indeces[j]]);
+                protein.filterAtoms("C", auth_seq_ids[used_indeces[j]]);
+                
+                std::vector<double> phi_angles = protein.getPhiAngles();
+                std::vector<double> psi_angles = protein.getPsiAngles();
+                
+                int iterations = phi_angles.size();
+                if(psi_angles.size() < iterations){
+                    iterations = psi_angles.size();
+                }
+                
+                if((phi_angles.size() < 100) || (psi_angles.size() < 100)){
+                    int additional_phi = 100 - phi_angles.size();
+                    int additional_psi = 100 - psi_angles.size();
+                    for(int k = 0; k < additional_phi; k++){
+                        phi_angles.push_back(0.00);
+                    }
+                    for(int k = 0; k < additional_psi; k++){
+                        psi_angles.push_back(0.00);
+                    }
+                }
+                
+                std::string sample = "";
+                for(int i = 0; i < 100; i++){
+                    sample = sample.append(std::to_string(phi_angles[i]) + ", " + std::to_string(psi_angles[i]) + ", ");
+                }
+                //sample = sample.append(labels[j]);
+                sample = sample.append(labels[used_indeces[j]]);
+                samples.push_back(sample);
+            }else{
+                std::cout << "No file: " << chains[used_indeces[j]] << std::endl;
+            }
+            
+        }
+        
+        std::string csv_file_name = argv[1];
+        csv_file_name = csv_file_name.substr(0, csv_file_name.length() - 4);
+        csv_file_name = csv_file_name.append(".csv");
+        CSVFile csv_file(csv_file_name);
+        csv_file.writeData("./", samples);
         
     }catch(const std::length_error& le){
         std::cerr << le.what() << std::endl;
-    }
-    catch(const std::invalid_argument& ia){
-        std::cerr << ia.what() << std::endl;
     }
 }

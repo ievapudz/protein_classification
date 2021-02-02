@@ -33,6 +33,7 @@ void CIFParser::parseAtomSiteColumns(){
 std::vector<Atom> CIFParser::parseAtoms(){
     std::vector<Atom> all_atoms;
     std::vector<std::string> atom_row(atom_site_columns_.size());
+    /* Note: this method must be called after parseAtomSiteColumns()*/
     
     do{
         Atom atom;

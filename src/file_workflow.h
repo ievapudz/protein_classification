@@ -35,6 +35,7 @@ class CSVFile : public File{
         void setData(std::vector<double> data_set, int data_set_choice);
         void writeData(std::string output_location, std::string data_label, int data_set_choice) const;
         void writeData(std::string output_location, std::string data_1_label, std::string data_2_label) const;
+    void writeData(std::string output_location, std::vector<std::string> data_set) const;
         void appendData(std::string output_location, int data_set_choice) const;
 
         std::vector<double> getData(int data_set_choice);
