@@ -1,10 +1,10 @@
 CXX = g++
 CXXFLAGS = -O3
 
-all: structural_alignment 
+all: dataset_generator
 
-structural_alignment: main.o representation_phase.o calculation_phase.o preparatory_phase.o identity_score_table.o constants.o cif_parser.o file_workflow.o geometry.o biological_structures.o block_distance.o distance_matrix.o distance_score_matrix.o scoring_matrix.o penalty_decision_matrix.o direction_matrix.o traceback.o sequence_aligner.o statistic_calculator.o
-	${CXX} main.o representation_phase.o calculation_phase.o preparatory_phase.o identity_score_table.o cif_parser.o file_workflow.o geometry.o biological_structures.o block_distance.o distance_matrix.o distance_score_matrix.o scoring_matrix.o penalty_decision_matrix.o direction_matrix.o sequence_aligner.o traceback.o statistic_calculator.o -o structural_alignment
+dataset_generator: main.o representation_phase.o calculation_phase.o preparatory_phase.o dataset_generator.o identity_score_table.o constants.o cif_parser.o file_workflow.o geometry.o biological_structures.o block_distance.o distance_matrix.o distance_score_matrix.o scoring_matrix.o penalty_decision_matrix.o direction_matrix.o traceback.o sequence_aligner.o statistic_calculator.o
+	${CXX} main.o representation_phase.o calculation_phase.o preparatory_phase.o dataset_generator.o identity_score_table.o cif_parser.o file_workflow.o geometry.o biological_structures.o block_distance.o distance_matrix.o distance_score_matrix.o scoring_matrix.o penalty_decision_matrix.o direction_matrix.o sequence_aligner.o traceback.o statistic_calculator.o -o dataset_generator
 
 main.o: main.cpp ./src/biological_structures.h preparatory_phase.h calculation_phase.h
 	${CXX} ${CXXFLAGS} main.cpp ./src/biological_structures.cpp preparatory_phase.cpp calculation_phase.cpp -c
@@ -17,6 +17,9 @@ calculation_phase.o: calculation_phase.h preparatory_phase.h ./src/block_distanc
 
 preparatory_phase.o: preparatory_phase.h ./src/file_workflow.h ./src/cif_parser.h
 	${CXX} ${CXXFLAGS} preparatory_phase.cpp ./src/constants.hpp ./src/file_workflow.cpp ./src/cif_parser.cpp ./src/biological_structures.cpp -c
+
+dataset_generator.o: ./src/dataset_generator.h ./src/file_workflow.h
+	${CXX} ${CXXFLAGS} ./src/dataset_generator.cpp ./src/file_workflow.cpp -c
 
 identity_score_table.o: ./src/identity_score_table.cpp ./src/identity_score_table.h
 	${CXX} ${CXXFLAGS} ./src/identity_score_table.cpp -c
@@ -64,7 +67,7 @@ constants.o: ./src/constants.hpp
 	${CXX} ${CXXFLAGS} ./src/constants.hpp -c
 
 clean:
-	rm -f ./structural_alignment ./*.o
+	rm -f ./dataset_generator ./*.o
 
 
 

@@ -10,88 +10,43 @@
 #include "./src/block_distance.h"
 #include "./src/constants.hpp"
 #include "./src/identity_score_table.h"
+#include "./src/dataset_generator.h"
 #include "preparatory_phase.h"
 #include "calculation_phase.h"
 #include "representation_phase.h"
 
+/*
+    Program that extracts the dihedral angle chains from proteins. These chains are written into
+    the csv file along with the SCOP class that a certain protein belongs to.
+*/
+
 int main(int argc, const char * argv[]){
 
     try{
-        std::ifstream input;
-        input.open(argv[1]);
-        std::string read;
-        std::vector<std::string> file_content;
-        std::vector<std::string> chains;
-        std::vector<std::string> auth_seq_ids;
-        std::vector<std::string> labels;
-        std::vector<std::string> samples;
-        
-        while(!input.eof()){
-            input >> read;
-            file_content.push_back(read);
-        }
-        file_content.pop_back();
-        
-        for(int i = 0; i < file_content.size(); i++){
-            if(i % 2 == 0){
-                chains.push_back(file_content[i]);
-            }else{
-                labels.push_back(file_content[i]);
-            }
-        }
-        const int number_of_classes = 5;
-        
-        int class_cluster_indeces [number_of_classes];
-        const std::string classes [number_of_classes] = { "all_alpha", "all_beta", "alpha_slash_beta", "alpha_plus_beta", "small_protein" };
-        bool class_index_found [number_of_classes];
-        for(int i = 0; i < number_of_classes; i++){
-            class_index_found[i] = false;
-        }
-        
-        for(int i = 0; i < labels.size(); i++){
-            for(int j = 0; j < number_of_classes; j++){
-                if((labels[i] == classes[j])&&(!class_index_found[j])){
-                    class_cluster_indeces[j] = i;
-                    class_index_found[j] = true;
-                }
-            }
-        }
-        
-        int number_of_used_indeces = 1000;
-        std::vector<int> used_indeces;
-        
-        for(int i = 0; i < number_of_classes; i++){
-            for(int j = 0; j < number_of_used_indeces; j++){
-                used_indeces.push_back(class_cluster_indeces[i] + j);
-            }
-        }
-        
-        for(int i = 0; i < chains.size(); i++){
-            std::string chain = chains[i].substr(0, chains[i].length() - 2);
-            std::string auth_seq_id = chains[i].substr(chains[i].length() - 1, chains[i].length());
-            auth_seq_ids.push_back(auth_seq_id);
-            chains[i] = "./mmCIF_files/" + chain + ".cif";
-        }
+        DatasetGenerator dataset_gen(argv[1]);
+        dataset_gen.readFile();
+        dataset_gen.extractChains();
+        dataset_gen.extractLabels();
+        dataset_gen.extractClassClusterIndeces();
+        dataset_gen.extractUsedIndeces(1000);
+        dataset_gen.extractAuthSeqIds();
+        dataset_gen.determineChainsFiles();
+        std::vector<int> used_indeces = dataset_gen.getUsedIndeces();
         
         for(int j = 0; j < used_indeces.size(); j++){
             std::cout << j << std::endl;
-            std::ifstream infile(chains[used_indeces[j]]);
+            std::ifstream infile(dataset_gen.getChains()[used_indeces[j]]);
             if(infile.good()){
                 CIFParser parser;
-                //parser.setFilePath(chains[j]);
-                parser.setFilePath(chains[used_indeces[j]]);
+            
+                parser.setFilePath(dataset_gen.getChains()[used_indeces[j]]);
                 Protein protein;
                 parser.parseAtomSiteColumns();
                 protein.setAllAtoms(parser.parseAtoms());
-                /*
-                protein.filterAtoms("N", auth_seq_ids[j]);
-                protein.filterAtoms("CA", auth_seq_ids[j]);
-                protein.filterAtoms("C", auth_seq_ids[j]);
-                 */
                 
-                protein.filterAtoms("N", auth_seq_ids[used_indeces[j]]);
-                protein.filterAtoms("CA", auth_seq_ids[used_indeces[j]]);
-                protein.filterAtoms("C", auth_seq_ids[used_indeces[j]]);
+                protein.filterAtoms("N", dataset_gen.getAuthSeqIds()[used_indeces[j]]);
+                protein.filterAtoms("CA", dataset_gen.getAuthSeqIds()[used_indeces[j]]);
+                protein.filterAtoms("C", dataset_gen.getAuthSeqIds()[used_indeces[j]]);
                 
                 std::vector<double> phi_angles = protein.getPhiAngles();
                 std::vector<double> psi_angles = protein.getPsiAngles();
@@ -112,25 +67,14 @@ int main(int argc, const char * argv[]){
                     }
                 }
                 
-                std::string sample = "";
-                for(int i = 0; i < 100; i++){
-                    sample = sample.append(std::to_string(phi_angles[i]) + ", " + std::to_string(psi_angles[i]) + ", ");
-                }
-                //sample = sample.append(labels[j]);
-                sample = sample.append(labels[used_indeces[j]]);
-                samples.push_back(sample);
+                dataset_gen.createSample(100, phi_angles, psi_angles);
+                dataset_gen.addSample(used_indeces[j]);
             }else{
-                std::cout << "No file: " << chains[used_indeces[j]] << std::endl;
+                std::cout << "No file: " << dataset_gen.getChains()[used_indeces[j]] << std::endl;
             }
-            
         }
-        
-        std::string csv_file_name = argv[1];
-        csv_file_name = csv_file_name.substr(0, csv_file_name.length() - 4);
-        csv_file_name = csv_file_name.append(".csv");
-        CSVFile csv_file(csv_file_name);
-        csv_file.writeData("./", samples);
-        
+        dataset_gen.writeSamples();
+
     }catch(const std::length_error& le){
         std::cerr << le.what() << std::endl;
     }
