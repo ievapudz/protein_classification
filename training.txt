@@ -1,5 +1,0 @@
-1F7C_A all_alpha
-1DFU_A all_beta
-1AFJ_A alpha_plus_beta
-1JBE_A alpha_slash_beta
-1A6B_A small_protein
