@@ -28,11 +28,12 @@ int main(int argc, const char * argv[]){
         dataset_gen.extractChains();
         dataset_gen.extractLabels();
         dataset_gen.extractClassClusterIndeces();
-        dataset_gen.extractUsedIndeces(1000);
+        // Number of indeces dhould be taken from command line.
+        dataset_gen.extractUsedIndeces(500);
         dataset_gen.extractAuthSeqIds();
         dataset_gen.determineChainsFiles();
         std::vector<int> used_indeces = dataset_gen.getUsedIndeces();
-        
+        std::cout << used_indeces.size() << std::endl;
         for(int j = 0; j < used_indeces.size(); j++){
             std::cout << j << std::endl;
             std::ifstream infile(dataset_gen.getChains()[used_indeces[j]]);
@@ -56,9 +57,9 @@ int main(int argc, const char * argv[]){
                     iterations = psi_angles.size();
                 }
                 
-                if((phi_angles.size() < 100) || (psi_angles.size() < 100)){
-                    int additional_phi = 100 - phi_angles.size();
-                    int additional_psi = 100 - psi_angles.size();
+                if((phi_angles.size() < 500) || (psi_angles.size() < 500)){
+                    int additional_phi = 500 - phi_angles.size();
+                    int additional_psi = 500 - psi_angles.size();
                     for(int k = 0; k < additional_phi; k++){
                         phi_angles.push_back(0.00);
                     }
@@ -67,7 +68,7 @@ int main(int argc, const char * argv[]){
                     }
                 }
                 
-                dataset_gen.createSample(100, phi_angles, psi_angles);
+                dataset_gen.createSample(500, phi_angles, psi_angles);
                 dataset_gen.addSample(used_indeces[j]);
             }else{
                 std::cout << "No file: " << dataset_gen.getChains()[used_indeces[j]] << std::endl;

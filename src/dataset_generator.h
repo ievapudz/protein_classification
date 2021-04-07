@@ -1,6 +1,7 @@
 #ifndef _DATASET_GENERATOR_
 #define _DATASET_GENERATOR_
 #define NUMBER_OF_CLASSES 5
+#include <cmath>
 #include <vector>
 #include <fstream>
 #include "file_workflow.h"
@@ -15,7 +16,7 @@ class DatasetGenerator{
         std::vector<std::string> auth_seq_ids_;
         std::vector<std::string> labels_;
     
-    std::string current_sample_;
+        std::string current_sample_;
         std::vector<std::string> samples_;
     
         int class_cluster_indeces_ [NUMBER_OF_CLASSES];

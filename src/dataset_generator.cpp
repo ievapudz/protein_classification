@@ -10,6 +10,7 @@ void DatasetGenerator::readFile(){
     input.open(input_file_name_);
     std::string read;
     
+    
     while(!input.eof()){
         input >> read;
         input_file_content_.push_back(read);
@@ -73,8 +74,9 @@ void DatasetGenerator::determineChainsFiles(){
 void DatasetGenerator::createSample(int number_of_angles, std::vector<double>& phi, std::vector<double>& psi){
     
     current_sample_ = "";
-    for(int i = 0; i < 100; i++){
-        current_sample_ = current_sample_.append(std::to_string(phi[i]) + ", " + std::to_string(psi[i]) + ", ");
+    for(int i = 0; i < number_of_angles; i++){
+//        current_sample_ = current_sample_.append(std::to_string(phi[i]) + ", " + std::to_string(psi[i]) + ", ");
+        current_sample_ = current_sample_.append(std::to_string(sin(phi[i])) + ", " + std::to_string(cos(phi[i])) + ", " + std::to_string(sin(psi[i])) + ", " + std::to_string(cos(psi[i])) + ", ");
     }
 }
 
