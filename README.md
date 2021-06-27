@@ -2,8 +2,8 @@
 # Dataset Generator
 ### For protein classification into SCOP classes using recurrent neural network
 
-1. Build with `make`;
-2. Run with ` ./dataset_generator [training | training | testing].txt`;
+1. Build with `make all`;
+2. Run with ` ./dataset_generator [training | training | testing].txt [number_of_proteins_from_each_group]`;
 
 Output will be a .csv file with m x n table, where  
 m = number of files  
@@ -24,3 +24,4 @@ contain.
     * alpha_slash_beta
     * small_protein
 3. Parse separate database files for each class (60% for training, 20% for validation, 20% for testing)
+
