@@ -16,8 +16,12 @@
 #include "representation_phase.h"
 
 /*
-    Program that extracts the dihedral angle chains from proteins. These chains are written into
+    Program that extracts the dihedral angle chains from proteins.
+    These chains are written into
     the csv file along with the SCOP class that a certain protein belongs to.
+ 
+    Input labelled (with SCOP classes) protein chains file.
+    Output: csv file with dihedral angles
 */
 
 int main(int argc, const char * argv[]){
@@ -28,8 +32,9 @@ int main(int argc, const char * argv[]){
         dataset_gen.extractChains();
         dataset_gen.extractLabels();
         dataset_gen.extractClassClusterIndeces();
-        // Number of indeces dhould be taken from command line.
-        dataset_gen.extractUsedIndeces(500);
+        
+        int number_of_indeces = atoi(argv[2]);
+        dataset_gen.extractUsedIndeces(number_of_indeces);
         dataset_gen.extractAuthSeqIds();
         dataset_gen.determineChainsFiles();
         std::vector<int> used_indeces = dataset_gen.getUsedIndeces();
@@ -57,9 +62,9 @@ int main(int argc, const char * argv[]){
                     iterations = psi_angles.size();
                 }
                 
-                if((phi_angles.size() < 500) || (psi_angles.size() < 500)){
-                    int additional_phi = 500 - phi_angles.size();
-                    int additional_psi = 500 - psi_angles.size();
+                if((phi_angles.size() < number_of_indeces) || (psi_angles.size() < number_of_indeces)){
+                    int additional_phi = number_of_indeces - phi_angles.size();
+                    int additional_psi = number_of_indeces - psi_angles.size();
                     for(int k = 0; k < additional_phi; k++){
                         phi_angles.push_back(0.00);
                     }
@@ -68,7 +73,7 @@ int main(int argc, const char * argv[]){
                     }
                 }
                 
-                dataset_gen.createSample(500, phi_angles, psi_angles);
+                dataset_gen.createSample(number_of_indeces, phi_angles, psi_angles);
                 dataset_gen.addSample(used_indeces[j]);
             }else{
                 std::cout << "No file: " << dataset_gen.getChains()[used_indeces[j]] << std::endl;
